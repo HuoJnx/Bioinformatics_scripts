@@ -1,0 +1,1 @@
+/home/junsheng/BIN/junsheng/auto_medaquast/auto_metaquast.sh

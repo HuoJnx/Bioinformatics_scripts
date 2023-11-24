@@ -1,0 +1,564 @@
+number	ko	map	description
+01100	ko01100	map01100	Metabolic pathways
+01110	ko01110	map01110	Biosynthesis of secondary metabolites
+01120	ko01120	map01120	Microbial metabolism in diverse environments
+01200	ko01200	map01200	Carbon metabolism
+01210	ko01210	map01210	2-Oxocarboxylic acid metabolism
+01212	ko01212	map01212	Fatty acid metabolism
+01230	ko01230	map01230	Biosynthesis of amino acids
+01232	ko01232	map01232	Nucleotide metabolism
+01250	ko01250	map01250	Biosynthesis of nucleotide sugars
+01240	ko01240	map01240	Biosynthesis of cofactors
+01220	ko01220	map01220	Degradation of aromatic compounds
+00010	ko00010	map00010	Glycolysis / Gluconeogenesis
+00020	ko00020	map00020	Citrate cycle (TCA cycle)
+00030	ko00030	map00030	Pentose phosphate pathway
+00040	ko00040	map00040	Pentose and glucuronate interconversions
+00051	ko00051	map00051	Fructose and mannose metabolism
+00052	ko00052	map00052	Galactose metabolism
+00053	ko00053	map00053	Ascorbate and aldarate metabolism
+00500	ko00500	map00500	Starch and sucrose metabolism
+00520	ko00520	map00520	Amino sugar and nucleotide sugar metabolism
+00620	ko00620	map00620	Pyruvate metabolism
+00630	ko00630	map00630	Glyoxylate and dicarboxylate metabolism
+00640	ko00640	map00640	Propanoate metabolism
+00650	ko00650	map00650	Butanoate metabolism
+00660	ko00660	map00660	C5-Branched dibasic acid metabolism
+00562	ko00562	map00562	Inositol phosphate metabolism
+00190	ko00190	map00190	Oxidative phosphorylation
+00195	ko00195	map00195	Photosynthesis
+00196	ko00196	map00196	Photosynthesis - antenna proteins
+00710	ko00710	map00710	Carbon fixation in photosynthetic organisms
+00720	ko00720	map00720	Carbon fixation pathways in prokaryotes
+00680	ko00680	map00680	Methane metabolism
+00910	ko00910	map00910	Nitrogen metabolism
+00920	ko00920	map00920	Sulfur metabolism
+00061	ko00061	map00061	Fatty acid biosynthesis
+00062	ko00062	map00062	Fatty acid elongation
+00071	ko00071	map00071	Fatty acid degradation
+00073	ko00073	map00073	Cutin, suberine and wax biosynthesis
+00100	ko00100	map00100	Steroid biosynthesis
+00120	ko00120	map00120	Primary bile acid biosynthesis
+00121	ko00121	map00121	Secondary bile acid biosynthesis
+00140	ko00140	map00140	Steroid hormone biosynthesis
+00561	ko00561	map00561	Glycerolipid metabolism
+00564	ko00564	map00564	Glycerophospholipid metabolism
+00565	ko00565	map00565	Ether lipid metabolism
+00600	ko00600	map00600	Sphingolipid metabolism
+00590	ko00590	map00590	Arachidonic acid metabolism
+00591	ko00591	map00591	Linoleic acid metabolism
+00592	ko00592	map00592	alpha-Linolenic acid metabolism
+01040	ko01040	map01040	Biosynthesis of unsaturated fatty acids
+00230	ko00230	map00230	Purine metabolism
+00240	ko00240	map00240	Pyrimidine metabolism
+00250	ko00250	map00250	Alanine, aspartate and glutamate metabolism
+00260	ko00260	map00260	Glycine, serine and threonine metabolism
+00270	ko00270	map00270	Cysteine and methionine metabolism
+00280	ko00280	map00280	Valine, leucine and isoleucine degradation
+00290	ko00290	map00290	Valine, leucine and isoleucine biosynthesis
+00300	ko00300	map00300	Lysine biosynthesis
+00310	ko00310	map00310	Lysine degradation
+00220	ko00220	map00220	Arginine biosynthesis
+00330	ko00330	map00330	Arginine and proline metabolism
+00340	ko00340	map00340	Histidine metabolism
+00350	ko00350	map00350	Tyrosine metabolism
+00360	ko00360	map00360	Phenylalanine metabolism
+00380	ko00380	map00380	Tryptophan metabolism
+00400	ko00400	map00400	Phenylalanine, tyrosine and tryptophan biosynthesis
+00410	ko00410	map00410	beta-Alanine metabolism
+00430	ko00430	map00430	Taurine and hypotaurine metabolism
+00440	ko00440	map00440	Phosphonate and phosphinate metabolism
+00450	ko00450	map00450	Selenocompound metabolism
+00460	ko00460	map00460	Cyanoamino acid metabolism
+00470	ko00470	map00470	D-Amino acid metabolism
+00480	ko00480	map00480	Glutathione metabolism
+00510	ko00510	map00510	N-Glycan biosynthesis
+00513	ko00513	map00513	Various types of N-glycan biosynthesis
+00512	ko00512	map00512	Mucin type O-glycan biosynthesis
+00515	ko00515	map00515	Mannose type O-glycan biosynthesis
+00514	ko00514	map00514	Other types of O-glycan biosynthesis
+00532	ko00532	map00532	Glycosaminoglycan biosynthesis - chondroitin sulfate / dermatan sulfate
+00534	ko00534	map00534	Glycosaminoglycan biosynthesis - heparan sulfate / heparin
+00533	ko00533	map00533	Glycosaminoglycan biosynthesis - keratan sulfate
+00531	ko00531	map00531	Glycosaminoglycan degradation
+00563	ko00563	map00563	Glycosylphosphatidylinositol (GPI)-anchor biosynthesis
+00601	ko00601	map00601	Glycosphingolipid biosynthesis - lacto and neolacto series
+00603	ko00603	map00603	Glycosphingolipid biosynthesis - globo and isoglobo series
+00604	ko00604	map00604	Glycosphingolipid biosynthesis - ganglio series
+00511	ko00511	map00511	Other glycan degradation
+00540	ko00540	map00540	Lipopolysaccharide biosynthesis
+00542	ko00542	map00542	O-Antigen repeat unit biosynthesis
+00541	ko00541	map00541	O-Antigen nucleotide sugar biosynthesis
+00550	ko00550	map00550	Peptidoglycan biosynthesis
+00552	ko00552	map00552	Teichoic acid biosynthesis
+00571	ko00571	map00571	Lipoarabinomannan (LAM) biosynthesis
+00572	ko00572	map00572	Arabinogalactan biosynthesis - Mycobacterium
+00543	ko00543	map00543	Exopolysaccharide biosynthesis
+00730	ko00730	map00730	Thiamine metabolism
+00740	ko00740	map00740	Riboflavin metabolism
+00750	ko00750	map00750	Vitamin B6 metabolism
+00760	ko00760	map00760	Nicotinate and nicotinamide metabolism
+00770	ko00770	map00770	Pantothenate and CoA biosynthesis
+00780	ko00780	map00780	Biotin metabolism
+00785	ko00785	map00785	Lipoic acid metabolism
+00790	ko00790	map00790	Folate biosynthesis
+00670	ko00670	map00670	One carbon pool by folate
+00830	ko00830	map00830	Retinol metabolism
+00860	ko00860	map00860	Porphyrin metabolism
+00130	ko00130	map00130	Ubiquinone and other terpenoid-quinone biosynthesis
+00900	ko00900	map00900	Terpenoid backbone biosynthesis
+00902	ko00902	map00902	Monoterpenoid biosynthesis
+00909	ko00909	map00909	Sesquiterpenoid and triterpenoid biosynthesis
+00904	ko00904	map00904	Diterpenoid biosynthesis
+00906	ko00906	map00906	Carotenoid biosynthesis
+00905	ko00905	map00905	Brassinosteroid biosynthesis
+00981	ko00981	map00981	Insect hormone biosynthesis
+00908	ko00908	map00908	Zeatin biosynthesis
+00903	ko00903	map00903	Limonene degradation
+00907	ko00907	map00907	Pinene, camphor and geraniol degradation
+01052	ko01052	map01052	Type I polyketide structures
+00522	ko00522	map00522	Biosynthesis of 12-, 14- and 16-membered macrolides
+01051	ko01051	map01051	Biosynthesis of ansamycins
+01059	ko01059	map01059	Biosynthesis of enediyne antibiotics
+01056	ko01056	map01056	Biosynthesis of type II polyketide backbone
+01057	ko01057	map01057	Biosynthesis of type II polyketide products
+00253	ko00253	map00253	Tetracycline biosynthesis
+00523	ko00523	map00523	Polyketide sugar unit biosynthesis
+01054	ko01054	map01054	Nonribosomal peptide structures
+01053	ko01053	map01053	Biosynthesis of siderophore group nonribosomal peptides
+01055	ko01055	map01055	Biosynthesis of vancomycin group antibiotics
+00940	ko00940	map00940	Phenylpropanoid biosynthesis
+00945	ko00945	map00945	Stilbenoid, diarylheptanoid and gingerol biosynthesis
+00941	ko00941	map00941	Flavonoid biosynthesis
+00944	ko00944	map00944	Flavone and flavonol biosynthesis
+00942	ko00942	map00942	Anthocyanin biosynthesis
+00943	ko00943	map00943	Isoflavonoid biosynthesis
+00946	ko00946	map00946	Degradation of flavonoids
+00901	ko00901	map00901	Indole alkaloid biosynthesis
+00403	ko00403	map00403	Indole diterpene alkaloid biosynthesis
+00950	ko00950	map00950	Isoquinoline alkaloid biosynthesis
+00960	ko00960	map00960	Tropane, piperidine and pyridine alkaloid biosynthesis
+00996	ko00996	map00996	Biosynthesis of various alkaloids
+00232	ko00232	map00232	Caffeine metabolism
+00965	ko00965	map00965	Betalain biosynthesis
+00966	ko00966	map00966	Glucosinolate biosynthesis
+00402	ko00402	map00402	Benzoxazinoid biosynthesis
+00311	ko00311	map00311	Penicillin and cephalosporin biosynthesis
+00332	ko00332	map00332	Carbapenem biosynthesis
+00261	ko00261	map00261	Monobactam biosynthesis
+00331	ko00331	map00331	Clavulanic acid biosynthesis
+00521	ko00521	map00521	Streptomycin biosynthesis
+00524	ko00524	map00524	Neomycin, kanamycin and gentamicin biosynthesis
+00525	ko00525	map00525	Acarbose and validamycin biosynthesis
+00401	ko00401	map00401	Novobiocin biosynthesis
+00404	ko00404	map00404	Staurosporine biosynthesis
+00405	ko00405	map00405	Phenazine biosynthesis
+00333	ko00333	map00333	Prodigiosin biosynthesis
+00254	ko00254	map00254	Aflatoxin biosynthesis
+00998	ko00998	map00998	Biosynthesis of various antibiotics
+00999	ko00999	map00999	Biosynthesis of various plant secondary metabolites
+00997	ko00997	map00997	Biosynthesis of various other secondary metabolites
+00362	ko00362	map00362	Benzoate degradation
+00627	ko00627	map00627	Aminobenzoate degradation
+00364	ko00364	map00364	Fluorobenzoate degradation
+00625	ko00625	map00625	Chloroalkane and chloroalkene degradation
+00361	ko00361	map00361	Chlorocyclohexane and chlorobenzene degradation
+00623	ko00623	map00623	Toluene degradation
+00622	ko00622	map00622	Xylene degradation
+00633	ko00633	map00633	Nitrotoluene degradation
+00642	ko00642	map00642	Ethylbenzene degradation
+00643	ko00643	map00643	Styrene degradation
+00791	ko00791	map00791	Atrazine degradation
+00930	ko00930	map00930	Caprolactam degradation
+00363	ko00363	map00363	Bisphenol degradation
+00621	ko00621	map00621	Dioxin degradation
+00626	ko00626	map00626	Naphthalene degradation
+00624	ko00624	map00624	Polycyclic aromatic hydrocarbon degradation
+00365	ko00365	map00365	Furfural degradation
+00984	ko00984	map00984	Steroid degradation
+00980	ko00980	map00980	Metabolism of xenobiotics by cytochrome P450
+00982	ko00982	map00982	Drug metabolism - cytochrome P450
+00983	ko00983	map00983	Drug metabolism - other enzymes
+01010	ko01010	map01010	Overview of biosynthetic pathways
+01060	ko01060	map01060	Biosynthesis of plant secondary metabolites
+01061	ko01061	map01061	Biosynthesis of phenylpropanoids
+01062	ko01062	map01062	Biosynthesis of terpenoids and steroids
+01063	ko01063	map01063	Biosynthesis of alkaloids derived from shikimate pathway
+01064	ko01064	map01064	Biosynthesis of alkaloids derived from ornithine, lysine and nicotinic acid
+01065	ko01065	map01065	Biosynthesis of alkaloids derived from histidine and purine
+01066	ko01066	map01066	Biosynthesis of alkaloids derived from terpenoid and polyketide
+01070	ko01070	map01070	Biosynthesis of plant hormones
+03020	ko03020	map03020	RNA polymerase
+03022	ko03022	map03022	Basal transcription factors
+03040	ko03040	map03040	Spliceosome
+03010	ko03010	map03010	Ribosome
+00970	ko00970	map00970	Aminoacyl-tRNA biosynthesis
+03013	ko03013	map03013	Nucleocytoplasmic transport
+03015	ko03015	map03015	mRNA surveillance pathway
+03008	ko03008	map03008	Ribosome biogenesis in eukaryotes
+03060	ko03060	map03060	Protein export
+04141	ko04141	map04141	Protein processing in endoplasmic reticulum
+04130	ko04130	map04130	SNARE interactions in vesicular transport
+04120	ko04120	map04120	Ubiquitin mediated proteolysis
+04122	ko04122	map04122	Sulfur relay system
+03050	ko03050	map03050	Proteasome
+03018	ko03018	map03018	RNA degradation
+03030	ko03030	map03030	DNA replication
+03410	ko03410	map03410	Base excision repair
+03420	ko03420	map03420	Nucleotide excision repair
+03430	ko03430	map03430	Mismatch repair
+03440	ko03440	map03440	Homologous recombination
+03450	ko03450	map03450	Non-homologous end-joining
+03460	ko03460	map03460	Fanconi anemia pathway
+03230	ko03230	map03230	Viral genome structure
+03240	ko03240	map03240	Viral replication
+03250	ko03250	map03250	Viral life cycle - HIV-1
+03260	ko03260	map03260	Virion - Human immunodeficiency virus
+03262	ko03262	map03262	Virion - Coronavirus
+03261	ko03261	map03261	Virion - Influenza A virus
+03263	ko03263	map03263	Virion - Enterovirus
+03264	ko03264	map03264	Virion - Flavivirus
+03265	ko03265	map03265	Virion - Lyssavirus
+03266	ko03266	map03266	Virion - Herpesvirus
+03268	ko03268	map03268	Virion - Orthopoxvirus
+03267	ko03267	map03267	Virion - Adenovirus
+02010	ko02010	map02010	ABC transporters
+02060	ko02060	map02060	Phosphotransferase system (PTS)
+03070	ko03070	map03070	Bacterial secretion system
+02020	ko02020	map02020	Two-component system
+04010	ko04010	map04010	MAPK signaling pathway
+04013	ko04013	map04013	MAPK signaling pathway - fly
+04016	ko04016	map04016	MAPK signaling pathway - plant
+04011	ko04011	map04011	MAPK signaling pathway - yeast
+04012	ko04012	map04012	ErbB signaling pathway
+04014	ko04014	map04014	Ras signaling pathway
+04015	ko04015	map04015	Rap1 signaling pathway
+04310	ko04310	map04310	Wnt signaling pathway
+04330	ko04330	map04330	Notch signaling pathway
+04340	ko04340	map04340	Hedgehog signaling pathway
+04341	ko04341	map04341	Hedgehog signaling pathway - fly
+04350	ko04350	map04350	TGF-beta signaling pathway
+04390	ko04390	map04390	Hippo signaling pathway
+04391	ko04391	map04391	Hippo signaling pathway - fly
+04392	ko04392	map04392	Hippo signaling pathway - multiple species
+04370	ko04370	map04370	VEGF signaling pathway
+04371	ko04371	map04371	Apelin signaling pathway
+04630	ko04630	map04630	JAK-STAT signaling pathway
+04064	ko04064	map04064	NF-kappa B signaling pathway
+04668	ko04668	map04668	TNF signaling pathway
+04066	ko04066	map04066	HIF-1 signaling pathway
+04068	ko04068	map04068	FoxO signaling pathway
+04020	ko04020	map04020	Calcium signaling pathway
+04070	ko04070	map04070	Phosphatidylinositol signaling system
+04072	ko04072	map04072	Phospholipase D signaling pathway
+04071	ko04071	map04071	Sphingolipid signaling pathway
+04024	ko04024	map04024	cAMP signaling pathway
+04022	ko04022	map04022	cGMP-PKG signaling pathway
+04151	ko04151	map04151	PI3K-Akt signaling pathway
+04152	ko04152	map04152	AMPK signaling pathway
+04150	ko04150	map04150	mTOR signaling pathway
+04075	ko04075	map04075	Plant hormone signal transduction
+04080	ko04080	map04080	Neuroactive ligand-receptor interaction
+04060	ko04060	map04060	Cytokine-cytokine receptor interaction
+04061	ko04061	map04061	Viral protein interaction with cytokine and cytokine receptor
+04512	ko04512	map04512	ECM-receptor interaction
+04514	ko04514	map04514	Cell adhesion molecules
+04144	ko04144	map04144	Endocytosis
+04145	ko04145	map04145	Phagosome
+04142	ko04142	map04142	Lysosome
+04146	ko04146	map04146	Peroxisome
+04140	ko04140	map04140	Autophagy - animal
+04138	ko04138	map04138	Autophagy - yeast
+04136	ko04136	map04136	Autophagy - other
+04137	ko04137	map04137	Mitophagy - animal
+04139	ko04139	map04139	Mitophagy - yeast
+04110	ko04110	map04110	Cell cycle
+04111	ko04111	map04111	Cell cycle - yeast
+04112	ko04112	map04112	Cell cycle - Caulobacter
+04113	ko04113	map04113	Meiosis - yeast
+04114	ko04114	map04114	Oocyte meiosis
+04210	ko04210	map04210	Apoptosis
+04214	ko04214	map04214	Apoptosis - fly
+04215	ko04215	map04215	Apoptosis - multiple species
+04216	ko04216	map04216	Ferroptosis
+04217	ko04217	map04217	Necroptosis
+04115	ko04115	map04115	p53 signaling pathway
+04218	ko04218	map04218	Cellular senescence
+04510	ko04510	map04510	Focal adhesion
+04520	ko04520	map04520	Adherens junction
+04530	ko04530	map04530	Tight junction
+04540	ko04540	map04540	Gap junction
+04550	ko04550	map04550	Signaling pathways regulating pluripotency of stem cells
+02024	ko02024	map02024	Quorum sensing
+05111	ko05111	map05111	Biofilm formation - Vibrio cholerae
+02025	ko02025	map02025	Biofilm formation - Pseudomonas aeruginosa
+02026	ko02026	map02026	Biofilm formation - Escherichia coli
+02030	ko02030	map02030	Bacterial chemotaxis
+02040	ko02040	map02040	Flagellar assembly
+04814	ko04814	map04814	Motor proteins
+04810	ko04810	map04810	Regulation of actin cytoskeleton
+04640	ko04640	map04640	Hematopoietic cell lineage
+04610	ko04610	map04610	Complement and coagulation cascades
+04611	ko04611	map04611	Platelet activation
+04613	ko04613	map04613	Neutrophil extracellular trap formation
+04620	ko04620	map04620	Toll-like receptor signaling pathway
+04624	ko04624	map04624	Toll and Imd signaling pathway
+04621	ko04621	map04621	NOD-like receptor signaling pathway
+04622	ko04622	map04622	RIG-I-like receptor signaling pathway
+04623	ko04623	map04623	Cytosolic DNA-sensing pathway
+04625	ko04625	map04625	C-type lectin receptor signaling pathway
+04650	ko04650	map04650	Natural killer cell mediated cytotoxicity
+04612	ko04612	map04612	Antigen processing and presentation
+04660	ko04660	map04660	T cell receptor signaling pathway
+04658	ko04658	map04658	Th1 and Th2 cell differentiation
+04659	ko04659	map04659	Th17 cell differentiation
+04657	ko04657	map04657	IL-17 signaling pathway
+04662	ko04662	map04662	B cell receptor signaling pathway
+04664	ko04664	map04664	Fc epsilon RI signaling pathway
+04666	ko04666	map04666	Fc gamma R-mediated phagocytosis
+04670	ko04670	map04670	Leukocyte transendothelial migration
+04672	ko04672	map04672	Intestinal immune network for IgA production
+04062	ko04062	map04062	Chemokine signaling pathway
+04911	ko04911	map04911	Insulin secretion
+04910	ko04910	map04910	Insulin signaling pathway
+04922	ko04922	map04922	Glucagon signaling pathway
+04923	ko04923	map04923	Regulation of lipolysis in adipocytes
+04920	ko04920	map04920	Adipocytokine signaling pathway
+03320	ko03320	map03320	PPAR signaling pathway
+04929	ko04929	map04929	GnRH secretion
+04912	ko04912	map04912	GnRH signaling pathway
+04913	ko04913	map04913	Ovarian steroidogenesis
+04915	ko04915	map04915	Estrogen signaling pathway
+04914	ko04914	map04914	Progesterone-mediated oocyte maturation
+04917	ko04917	map04917	Prolactin signaling pathway
+04921	ko04921	map04921	Oxytocin signaling pathway
+04926	ko04926	map04926	Relaxin signaling pathway
+04935	ko04935	map04935	Growth hormone synthesis, secretion and action
+04918	ko04918	map04918	Thyroid hormone synthesis
+04919	ko04919	map04919	Thyroid hormone signaling pathway
+04928	ko04928	map04928	Parathyroid hormone synthesis, secretion and action
+04916	ko04916	map04916	Melanogenesis
+04924	ko04924	map04924	Renin secretion
+04614	ko04614	map04614	Renin-angiotensin system
+04925	ko04925	map04925	Aldosterone synthesis and secretion
+04927	ko04927	map04927	Cortisol synthesis and secretion
+04260	ko04260	map04260	Cardiac muscle contraction
+04261	ko04261	map04261	Adrenergic signaling in cardiomyocytes
+04270	ko04270	map04270	Vascular smooth muscle contraction
+04970	ko04970	map04970	Salivary secretion
+04971	ko04971	map04971	Gastric acid secretion
+04972	ko04972	map04972	Pancreatic secretion
+04976	ko04976	map04976	Bile secretion
+04973	ko04973	map04973	Carbohydrate digestion and absorption
+04974	ko04974	map04974	Protein digestion and absorption
+04975	ko04975	map04975	Fat digestion and absorption
+04979	ko04979	map04979	Cholesterol metabolism
+04977	ko04977	map04977	Vitamin digestion and absorption
+04978	ko04978	map04978	Mineral absorption
+04962	ko04962	map04962	Vasopressin-regulated water reabsorption
+04960	ko04960	map04960	Aldosterone-regulated sodium reabsorption
+04961	ko04961	map04961	Endocrine and other factor-regulated calcium reabsorption
+04964	ko04964	map04964	Proximal tubule bicarbonate reclamation
+04966	ko04966	map04966	Collecting duct acid secretion
+04724	ko04724	map04724	Glutamatergic synapse
+04727	ko04727	map04727	GABAergic synapse
+04725	ko04725	map04725	Cholinergic synapse
+04728	ko04728	map04728	Dopaminergic synapse
+04726	ko04726	map04726	Serotonergic synapse
+04720	ko04720	map04720	Long-term potentiation
+04730	ko04730	map04730	Long-term depression
+04723	ko04723	map04723	Retrograde endocannabinoid signaling
+04721	ko04721	map04721	Synaptic vesicle cycle
+04722	ko04722	map04722	Neurotrophin signaling pathway
+04744	ko04744	map04744	Phototransduction
+04745	ko04745	map04745	Phototransduction - fly
+04740	ko04740	map04740	Olfactory transduction
+04742	ko04742	map04742	Taste transduction
+04750	ko04750	map04750	Inflammatory mediator regulation of TRP channels
+04320	ko04320	map04320	Dorso-ventral axis formation
+04360	ko04360	map04360	Axon guidance
+04361	ko04361	map04361	Axon regeneration
+04380	ko04380	map04380	Osteoclast differentiation
+04211	ko04211	map04211	Longevity regulating pathway
+04212	ko04212	map04212	Longevity regulating pathway - worm
+04213	ko04213	map04213	Longevity regulating pathway - multiple species
+04710	ko04710	map04710	Circadian rhythm
+04713	ko04713	map04713	Circadian entrainment
+04711	ko04711	map04711	Circadian rhythm - fly
+04712	ko04712	map04712	Circadian rhythm - plant
+04714	ko04714	map04714	Thermogenesis
+04626	ko04626	map04626	Plant-pathogen interaction
+05200	ko05200	map05200	Pathways in cancer
+05202	ko05202	map05202	Transcriptional misregulation in cancer
+05206	ko05206	map05206	MicroRNAs in cancer
+05205	ko05205	map05205	Proteoglycans in cancer
+05204	ko05204	map05204	Chemical carcinogenesis - DNA adducts
+05207	ko05207	map05207	Chemical carcinogenesis - receptor activation
+05208	ko05208	map05208	Chemical carcinogenesis - reactive oxygen species
+05203	ko05203	map05203	Viral carcinogenesis
+05230	ko05230	map05230	Central carbon metabolism in cancer
+05231	ko05231	map05231	Choline metabolism in cancer
+05235	ko05235	map05235	PD-L1 expression and PD-1 checkpoint pathway in cancer
+05210	ko05210	map05210	Colorectal cancer
+05212	ko05212	map05212	Pancreatic cancer
+05225	ko05225	map05225	Hepatocellular carcinoma
+05226	ko05226	map05226	Gastric cancer
+05214	ko05214	map05214	Glioma
+05216	ko05216	map05216	Thyroid cancer
+05221	ko05221	map05221	Acute myeloid leukemia
+05220	ko05220	map05220	Chronic myeloid leukemia
+05217	ko05217	map05217	Basal cell carcinoma
+05218	ko05218	map05218	Melanoma
+05211	ko05211	map05211	Renal cell carcinoma
+05219	ko05219	map05219	Bladder cancer
+05215	ko05215	map05215	Prostate cancer
+05213	ko05213	map05213	Endometrial cancer
+05224	ko05224	map05224	Breast cancer
+05222	ko05222	map05222	Small cell lung cancer
+05223	ko05223	map05223	Non-small cell lung cancer
+05166	ko05166	map05166	Human T-cell leukemia virus 1 infection
+05170	ko05170	map05170	Human immunodeficiency virus 1 infection
+05161	ko05161	map05161	Hepatitis B
+05160	ko05160	map05160	Hepatitis C
+05171	ko05171	map05171	Coronavirus disease - COVID-19
+05164	ko05164	map05164	Influenza A
+05162	ko05162	map05162	Measles
+05168	ko05168	map05168	Herpes simplex virus 1 infection
+05163	ko05163	map05163	Human cytomegalovirus infection
+05167	ko05167	map05167	Kaposi sarcoma-associated herpesvirus infection
+05169	ko05169	map05169	Epstein-Barr virus infection
+05165	ko05165	map05165	Human papillomavirus infection
+05110	ko05110	map05110	Vibrio cholerae infection
+05120	ko05120	map05120	Epithelial cell signaling in Helicobacter pylori infection
+05130	ko05130	map05130	Pathogenic Escherichia coli infection
+05132	ko05132	map05132	Salmonella infection
+05131	ko05131	map05131	Shigellosis
+05135	ko05135	map05135	Yersinia infection
+05133	ko05133	map05133	Pertussis
+05134	ko05134	map05134	Legionellosis
+05150	ko05150	map05150	Staphylococcus aureus infection
+05152	ko05152	map05152	Tuberculosis
+05100	ko05100	map05100	Bacterial invasion of epithelial cells
+05146	ko05146	map05146	Amoebiasis
+05144	ko05144	map05144	Malaria
+05145	ko05145	map05145	Toxoplasmosis
+05140	ko05140	map05140	Leishmaniasis
+05142	ko05142	map05142	Chagas disease
+05143	ko05143	map05143	African trypanosomiasis
+05310	ko05310	map05310	Asthma
+05322	ko05322	map05322	Systemic lupus erythematosus
+05323	ko05323	map05323	Rheumatoid arthritis
+05320	ko05320	map05320	Autoimmune thyroid disease
+05321	ko05321	map05321	Inflammatory bowel disease
+05330	ko05330	map05330	Allograft rejection
+05332	ko05332	map05332	Graft-versus-host disease
+05340	ko05340	map05340	Primary immunodeficiency
+05010	ko05010	map05010	Alzheimer disease
+05012	ko05012	map05012	Parkinson disease
+05014	ko05014	map05014	Amyotrophic lateral sclerosis
+05016	ko05016	map05016	Huntington disease
+05017	ko05017	map05017	Spinocerebellar ataxia
+05020	ko05020	map05020	Prion disease
+05022	ko05022	map05022	Pathways of neurodegeneration - multiple diseases
+05030	ko05030	map05030	Cocaine addiction
+05031	ko05031	map05031	Amphetamine addiction
+05032	ko05032	map05032	Morphine addiction
+05033	ko05033	map05033	Nicotine addiction
+05034	ko05034	map05034	Alcoholism
+05417	ko05417	map05417	Lipid and atherosclerosis
+05418	ko05418	map05418	Fluid shear stress and atherosclerosis
+05410	ko05410	map05410	Hypertrophic cardiomyopathy
+05412	ko05412	map05412	Arrhythmogenic right ventricular cardiomyopathy
+05414	ko05414	map05414	Dilated cardiomyopathy
+05415	ko05415	map05415	Diabetic cardiomyopathy
+05416	ko05416	map05416	Viral myocarditis
+04930	ko04930	map04930	Type II diabetes mellitus
+04940	ko04940	map04940	Type I diabetes mellitus
+04950	ko04950	map04950	Maturity onset diabetes of the young
+04936	ko04936	map04936	Alcoholic liver disease
+04932	ko04932	map04932	Non-alcoholic fatty liver disease
+04931	ko04931	map04931	Insulin resistance
+04933	ko04933	map04933	AGE-RAGE signaling pathway in diabetic complications
+04934	ko04934	map04934	Cushing syndrome
+01501	ko01501	map01501	beta-Lactam resistance
+01502	ko01502	map01502	Vancomycin resistance
+01503	ko01503	map01503	Cationic antimicrobial peptide (CAMP) resistance
+01521	ko01521	map01521	EGFR tyrosine kinase inhibitor resistance
+01524	ko01524	map01524	Platinum drug resistance
+01523	ko01523	map01523	Antifolate resistance
+01522	ko01522	map01522	Endocrine resistance
+07011	ko07011	map07011	Penicillins
+07012	ko07012	map07012	Cephalosporins - parenteral agents
+07013	ko07013	map07013	Cephalosporins - oral agents
+07021	ko07021	map07021	Aminoglycosides
+07019	ko07019	map07019	Tetracyclines
+07020	ko07020	map07020	Macrolides and ketolides
+07014	ko07014	map07014	Quinolones
+07023	ko07023	map07023	Rifamycins
+07026	ko07026	map07026	Antifungal agents
+07044	ko07044	map07044	Antiviral agents
+07053	ko07053	map07053	Anti-HIV agents
+07040	ko07040	map07040	Antineoplastics - alkylating agents
+07041	ko07041	map07041	Antineoplastics - antimetabolic agents
+07042	ko07042	map07042	Antineoplastics - agents from natural products
+07043	ko07043	map07043	Antineoplastics - hormones
+07045	ko07045	map07045	Antineoplastics - protein kinase inhibitors
+07032	ko07032	map07032	Hypnotics
+07030	ko07030	map07030	Anxiolytics
+07033	ko07033	map07033	Anticonvulsants
+07015	ko07015	map07015	Local analgesics
+07039	ko07039	map07039	Opioid analgesics
+07028	ko07028	map07028	Antipsychotics
+07029	ko07029	map07029	Antipsychotics - phenothiazines
+07031	ko07031	map07031	Antipsychotics - butyrophenones
+07027	ko07027	map07027	Antidepressants
+07056	ko07056	map07056	Agents for Alzheimer-type dementia
+07057	ko07057	map07057	Antiparkinsonian agents
+07055	ko07055	map07055	Sulfonamide derivatives - overview
+07016	ko07016	map07016	Sulfonamide derivatives - sulfa drugs
+07017	ko07017	map07017	Sulfonamide derivatives - diuretics
+07018	ko07018	map07018	Sulfonamide derivatives - hypoglycemic agents
+07037	ko07037	map07037	Antiarrhythmic drugs
+07038	ko07038	map07038	Antiulcer drugs
+07046	ko07046	map07046	Immunosuppressive agents
+07047	ko07047	map07047	Osteoporosis drugs
+07048	ko07048	map07048	Antimigraines
+07049	ko07049	map07049	Antithrombosis agents
+07050	ko07050	map07050	Antirheumatics - DMARDs and biological agents
+07051	ko07051	map07051	Antidiabetics
+07052	ko07052	map07052	Antidyslipidemic agents
+07054	ko07054	map07054	Antiglaucoma agents
+07220	ko07220	map07220	Cholinergic and anticholinergic drugs
+07215	ko07215	map07215	alpha-Adrenergic receptor agonists/antagonists
+07214	ko07214	map07214	beta-Adrenergic receptor agonists/antagonists
+07213	ko07213	map07213	Dopamine receptor agonists/antagonists
+07212	ko07212	map07212	Histamine H1 receptor antagonists
+07227	ko07227	map07227	Histamine H2/H3 receptor agonists/antagonists
+07211	ko07211	map07211	Serotonin receptor agonists/antagonists
+07228	ko07228	map07228	Eicosanoid receptor agonists/antagonists
+07224	ko07224	map07224	Opioid receptor agonists/antagonists
+07229	ko07229	map07229	Angiotensin receptor and endothelin receptor antagonists
+07225	ko07225	map07225	Glucocorticoid and mineralocorticoid receptor agonists/antagonists
+07226	ko07226	map07226	Progesterone, androgen and estrogen receptor agonists/antagonists
+07223	ko07223	map07223	Retinoic acid receptor (RAR) and retinoid X receptor (RXR) agonists/antagonists
+07222	ko07222	map07222	Peroxisome proliferator-activated receptor (PPAR) agonists
+07221	ko07221	map07221	Nicotinic cholinergic receptor antagonists
+07230	ko07230	map07230	GABA-A receptor agonists/antagonists
+07036	ko07036	map07036	Calcium channel blocking drugs
+07231	ko07231	map07231	Sodium channel blocking drugs
+07232	ko07232	map07232	Potassium channel blocking and opening drugs
+07235	ko07235	map07235	N-Methyl-D-aspartic acid (NMDA) receptor antagonists
+07233	ko07233	map07233	Ion transporter inhibitors
+07234	ko07234	map07234	Neurotransmitter transporter inhibitors
+07216	ko07216	map07216	Catecholamine transferase inhibitors
+07219	ko07219	map07219	Cyclooxygenase inhibitors
+07024	ko07024	map07024	HMG-CoA reductase inhibitors
+07217	ko07217	map07217	Renin-angiotensin system inhibitors
+07218	ko07218	map07218	HIV protease inhibitors
+07025	ko07025	map07025	Quinolines
+07034	ko07034	map07034	Eicosanoids
+07035	ko07035	map07035	Prostaglandins
+07110	ko07110	map07110	Benzoic acid family
+07112	ko07112	map07112	1,2-Diphenyl substitution family
+07114	ko07114	map07114	Naphthalene family
+07117	ko07117	map07117	Benzodiazepine family
