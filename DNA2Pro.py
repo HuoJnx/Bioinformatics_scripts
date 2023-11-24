@@ -1,1 +1,0 @@
-DNA2Pro/DNA2Pro.py
