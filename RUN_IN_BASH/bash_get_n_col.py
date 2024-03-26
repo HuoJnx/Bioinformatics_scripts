@@ -19,9 +19,11 @@ cat text_file | ./get_n_cols.py 3 7 ','  # Extracts columns from 3rd to 7th usin
 cat text_file | ./get_n_cols.py 1,5,9 ','  # Extracts the 1st, 5th, and 9th columns using comma as a separator.
 cat text_file | ./get_n_cols.py -2 ','  # Extracts the second last column.
 """
-
+import warnings
+warnings.filterwarnings("ignore")
 import sys
 import pandas as pd
+
 
 def adjust_col_num(col_num, total_cols):
     """Adjust column number to support negative indexing."""

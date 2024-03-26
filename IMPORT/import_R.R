@@ -3,6 +3,39 @@ options(repr.matrix.max.rows=20)
 size_obj=c(8,8)
 options(repr.plot.width=size_obj[1], repr.plot.height=size_obj[2])
 
+sprintf_plus = function(...) {
+    formatted_string <- sprintf(...)
+    cat(formatted_string, "\n")
+}
+
+quiet_library = function(package) {
+    package_name = deparse(substitute(package))
+    suppressPackageStartupMessages(library(package_name, character.only = TRUE))
+}
+
+
+function_say = function(message, type="message") {
+    caller_calls = sys.calls()
+    if (length(caller_calls) > 1) {
+        caller_call = caller_calls[[length(caller_calls) - 1]]
+        function_name = as.character(caller_call[[1]])
+    } else {
+        function_name = "Global"
+    }
+
+    formatted_message = sprintf("》》%s : %s", function_name, message)
+    if(type=="warning"){
+        warning(formatted_message)
+    }else if(type=="error"){
+        stop(formatted_message)
+    }else if(type=="message"){
+        cat(formatted_message, "\n")
+    }
+
+}
+
+
+
 set_fig_size=function(width,height,size_obj=NULL){
     if(!is.null(size_obj)){
         options(repr.plot.width=size_obj[1], repr.plot.height=size_obj[2])
@@ -10,10 +43,6 @@ set_fig_size=function(width,height,size_obj=NULL){
         options(repr.plot.width=width, repr.plot.height=height)
     }
 
-}
-
-pretty_print=function(tt){
-    cat(tt,"\n\n")
 }
 
 print_rich=function(obj){
@@ -76,8 +105,8 @@ remove_folder = function(folder_path, force = F) {
 }
 ## ---------------------------------- parallel ----------------------------------
 library_parallel=function(n_cl=NULL){
-    library(doParallel)
-    library(foreach)
+    quiet_library(doParallel)
+    quiet_library(foreach)
     if(is.null(n_cl)){
         doParallel::registerDoParallel()
     }else{
@@ -87,11 +116,11 @@ library_parallel=function(n_cl=NULL){
 }
 
 ## ---------------------------------- write thing ----------------------------------
-write_df_wrap=function(df,file_name,save_dir=".",file_fmt="tsv",rowname="rowname",col_names=T,prompt=T){
+write_df_wrap=function(data,file_name,save_dir=".",file_fmt="tsv",rowname="rowname",col_names=T,prompt=T){
+
+    function_say("Saving dataframe.")
     ## convert
-    if(all(class(df)!=class(data.frame()))){
-        df=data.frame(df,check.names = F)
-    }
+    data = data %>% as.data.frame_plus()
     ## create folder
     dir.create(save_dir,showWarnings=F)
     ## filepath operation
@@ -99,26 +128,26 @@ write_df_wrap=function(df,file_name,save_dir=".",file_fmt="tsv",rowname="rowname
     file_name = fs::path_sanitize(file_name)
     fig_path=file.path(save_dir,file_name)
     ## rownames
-    if(has_rownames(df)){
-        df=df%>%rownames_to_column(rowname)
-        tt=sprintf("Rowname detected, coverted it to a column call '%s.'",rowname)
-        pretty_print(tt)
+    if(has_rownames(data)){
+        data=data%>%rownames_to_column(rowname)
+        tt=sprintf("》》Rowname detected, coverted it to a column call '%s.'",rowname)
+        function_say(tt)
     }
     ## format
     if(file_fmt=="tsv"){
-        write_tsv(df,fig_path,col_names=col_names)
+        write_tsv(data,fig_path,col_names=col_names)
     }else if(file_fmt=="csv"){
-        write_csv(df,fig_path,col_names=col_names)
+        write_csv(data,fig_path,col_names=col_names)
     }else if(file_fmt=="xlsx"){
-        library(writexl)
-        write_xlsx(df,fig_path,col_names=col_names,format_headers=F)
+        quiet_library(writexl)
+        write_xlsx(data,fig_path,col_names=col_names,format_headers=F)
     }else{
-        stop("Only support tsv, csv and xlsx.")
+        function_say("Only support tsv, csv and xlsx.",type="error")
     }
     ## prompt
     if(prompt){
         tt=sprintf("successfully save data.frame to %s",fig_path)
-        pretty_print(tt)
+        function_say(tt)
     }
 }
 
@@ -138,27 +167,27 @@ write_plain_text=function(text,text_name,text_dir=".",text_fmt="txt",prompt=T){
     ## prompt
     if(prompt){
         tt=sprintf("successfully save data.frame to %s",fig_path)
-        pretty_print(tt)
+        print(tt)
     }
 }
-write_RDS_plus = function(object, rds_name, rds_dir = ".", rds_fmt = "rd", prompt = T) {
+write_RDS_plus = function(object, file_name, save_dir = ".", file_fmt = "rd", prompt = T) {
     # Create the directory if it doesn't exist
-    dir.create(rds_dir, showWarnings = F)
+    dir.create(save_dir, showWarnings = F)
   
     # Construct the file name and sanitize it
-    file_name = paste0(rds_name, ".", rds_fmt)
+    file_name = paste0(file_name, ".", file_fmt)
     file_name = fs::path_sanitize(file_name)
   
     # Construct the full file path
-    rds_path = file.path(rds_dir, file_name)
+    file_path = file.path(save_dir, file_name)
   
     # Save the object as an RDS file
-    saveRDS(object, rds_path)
+    saveRDS(object, file_path)
   
   # Print a message to the console if prompt is TRUE
     if (prompt) {
-        tt = sprintf("Successfully saved object to %s", rds_path)
-        pretty_print(tt)  # Assuming you have a function called pretty_print to format the text
+        tt = sprintf("Successfully saved object to %s", file_path)
+        print(tt)  # Assuming you have a function called print to format the text
   }
 }
 
@@ -191,6 +220,24 @@ str_filter = function(str_vec,pattern,filter_out=T) {
     }
     return(str_vec)
 }
+str_split_plus = function(string, pattern="", n=Inf) {
+    
+    split_vector = str_split(string=string, pattern = pattern,n = n,)
+    
+    if(length(string) == 1){
+        return(unlist(split_vector))
+    }else{
+        return(split_vector)
+    }
+}
+
+str_sub_plus = function(string,start,end=NA){
+    if(is.na(NA)){
+        end = start
+    }
+    sub_res = str_sub(string = string, start = start, end = end)
+    return(sub_res)
+}
 
 ## ---------------------------------- infinity ----------------------------------
 log2_no_infinity = function(x,c){
@@ -214,17 +261,50 @@ is_infinite_plus = function(x) {
 }
 ## ---------------------------------- tidyverse ----------------------------------
 Sys.setenv(TZ = "Asia/Hong_Kong")# without this line, tidyverse will stuck for a long time
-suppressPackageStartupMessages(library(tidyverse))
-library(openxlsx)
+quiet_library(tidyverse)
+quiet_library(openxlsx)
 read_xlsx = read.xlsx
 
-as.data.frame_plus=function(df,rownames_to_column=F,var="rowname"){
-    df=df%>%data.frame(check.names=F)
-    if(rownames_to_column){
-        df=df%>%rownames_to_column(var)
+robust_check_type = function(data, what_you_want_to_check = "data.frame") {
+    data_type = class(data)
+    standard_data = switch(what_you_want_to_check,
+                            "data.frame" = data.frame(),
+                            "matrix" = matrix(),
+                            "list" = list(),
+                            "numeric" = numeric(),
+                            "character" = character(),
+                            "factor" = factor(),
+                            "integer" = integer(),
+                            "logical" = logical(),
+                            stop("Invalid 'what_you_want_to_check' value"))
+    standard_type = class(standard_data)
+
+    if (length(data_type) != 1) {
+        function_say(sprintf("Not a pure %s, it has %d classes: %s.", what_you_want_to_check, length(data_type), paste(data_type, collapse = ", ")))
+        return(FALSE)
+    } else {
+        if (data_type != standard_type) {
+            function_say(sprintf("Not a pure %s, it is %s.", what_you_want_to_check, data_type))
+            return(FALSE)
+        } else {
+            return(TRUE)
+        }
     }
-    return(df)
 }
+
+as.data.frame_plus = function(data, make_rownames_to_column = F, var = "rowname") {
+
+    if(!robust_check_type(data, what_you_want_to_check="data.frame")){
+        data = data %>% data.frame(check.names = F)
+    }
+
+    if (make_rownames_to_column) {
+        data = data %>% rownames_to_column(var)
+    }
+
+    return(data)
+}
+
 fix_order = function(array,rev=F) {
     if (is.factor(array)) {
         return(array)
@@ -548,8 +628,8 @@ drop_na_rows = function(df) {
 #### some operation like divide a data.frame by a vector in colwise behavior
 apply_vector_2_dataframe_row_by_row=function(df,vec,operator="/",strict=T){
     if(strict){
-        if(nrow(df)!=length(vec)){
-            stop("Please ensure the nrow of dataframe is equal to length of vector.")
+        if(ncol(df)!=length(vec)){
+            stop("Please ensure the ncol of dataframe is equal to length of vector.")
         }
     }
     exp=paste("df",operator,"vec")
@@ -558,8 +638,8 @@ apply_vector_2_dataframe_row_by_row=function(df,vec,operator="/",strict=T){
 }
 apply_vector_2_dataframe_col_by_col=function(df,vec,operator="/",strict=T){
     if(strict){
-        if(ncol(df)!=length(vec)){
-            stop("Please ensure the ncol of dataframe is equal to length of vector.")
+        if(nrow(df)!=length(vec)){
+            stop("Please ensure the nrow of dataframe is equal to length of vector.")
         }
     }
     df_t=df%>%t
@@ -742,12 +822,13 @@ arrange_by_hclust=function(df,dist_method="euclidean",hclust_method="average"){
 }
 ## ---------------------------------- ggplot2 ----------------------------------
 
-library(paletteer)
+quiet_library(paletteer)
 
 theme_set(theme_gray(base_size = 18))
 #theme_set(theme_bw(base_size = 18))
 
 ggsave_wrap=function(fig=NULL,file_name,save_dir=".",file_fmt="svg",size=c(5,5),prompt=T){
+    function_say("Saving ggplot figure.")
     ## if no fig input, use last plot
     if(is.null(fig)){
         fig=last_plot()
@@ -760,21 +841,23 @@ ggsave_wrap=function(fig=NULL,file_name,save_dir=".",file_fmt="svg",size=c(5,5),
     fig_path=file.path(save_dir,file_name)
     ggsave(fig_path,fig,width=size[1],height=size[2])
     if(prompt){
-        tt=sprintf("successfully save figure to %s",fig_path)
-        pretty_print(tt)
+        tt=sprintf("Successfully save figure to %s.",fig_path)
+        function_say(tt)
     }
 }
 
 
-get_hypothesis = function(data, group_col, value_col,
+get_hypothesis_for_plot = function(data, group_col, value_col,
     general_m = "kruskal", pair_m = "wilcox", adj_m = "fdr", add_xy_function="max",detail_text=T) {
-    library(rstatix)
-    # ------------------------------------ check  ------------------------------------
+    quiet_library(rstatix)
+    # prompt
+    function_say(sprintf("Hello, group_col is %s, value_col is %s.",group_col,value_col))
+    # check 
 
-    if(class(data)!=class(data.frame)){
-        data=data%>%data.frame
+    if(!inherits(data,"data.frame")){
+        data = data%>%as.data.frame_plus
     }
-    # ------------------------------------ conduct hypothesis test ------------------------------------
+    #  conduct hypothesis test 
     
     ## general test
     form = formula(paste(value_col, "~", group_col))
@@ -790,9 +873,11 @@ get_hypothesis = function(data, group_col, value_col,
     } else if (pair_m == 't.test') {
         pair_res = data %>% t_test(form,p.adjust.method = "none")
     }
-    pair_res=pair_res%>%adjust_pvalue(method="fdr")%>%add_significance("p.adj")
+    pair_res=pair_res%>%adjust_pvalue(method="fdr") %>%
+                            add_significance("p.adj",output.col="p.adj.signif") %>%
+                            add_significance("p",output.col="p.signif")
 
-    # ------------------------------------ get xy to plot ------------------------------------
+    # get xy to plot 
     pair_res = pair_res %>%add_xy_position(x = group_col,fun=add_xy_function)%>%data.frame
 
 
@@ -801,6 +886,105 @@ get_hypothesis = function(data, group_col, value_col,
 
     return(list(df_general_res=df_general_res,pair_res=pair_res,general_text=general_text))
 }
+
+adjust_group_col = function(data, group_col = NULL) {
+    if (is.null(group_col)) {
+        group_value = "All_samples"
+        data[["group_AUTO"]] = "All_samples"
+        group_col = "group_AUTO"
+        function_say(sprintf("》》No group_col, will mix all samples together to plot. Assign %s as group_col and %s as values.",group_col,group_value),type="warning")
+    } else {
+        # Ensure that the specified group_col exists in the dataframe
+        if (!group_col %in% names(data)) {
+            function_say(sprintf("》》The specified group column '%s' does not exist in the dataframe.", group_col),type="error")
+        }
+    }
+    return(list(data = data, group_col = group_col))
+}
+
+ggbox_points_pairwise_plus = function(df_plot, value_col, group_col = NULL, plotting_style = c("color","fill"), sig_test = T, general_stat_method = "kruskal", 
+                                pairwise_stat_method = "wilcox", p_type = c("p","p.adj"), sig_type = c("",".sig"), 
+                                sig_thresh = 0.05, hide_ns_for_plot = T, 
+                                plot_sample_label = F, sample_label = "sample",
+                                verbose_test_res_for_plot = T, basic_font_size = 12) {
+
+    ## check if group_col existed
+    adjusted_group_col_res=adjust_group_col(data=df_plot,group_col=group_col)
+    df_plot = adjusted_group_col_res$data
+    group_col = adjusted_group_col_res$group_col
+
+
+    ## plot
+    pos = position_jitter(width = 0.5, seed = 1)
+    if(length(plotting_style) == 2) {
+        plotting_style = plotting_style[1]
+    }
+    if(plotting_style=="color"){ # Don't use global aes, otherwise it will raise error in stat_manual_pvalue
+        fig = ggplot(df_plot, aes_string(x = group_col, y = value_col)) +
+                    geom_boxplot(outlier.shape = NA, aes_string(color = group_col), fill = NA) +
+                    geom_point(position = pos, aes_string(color = group_col))
+                    
+
+    }else if(plotting_style=="fill"){
+        fig = ggplot(df_plot, aes_string(x = group_col, y = value_col)) +
+                    geom_boxplot(outlier.shape = NA, aes_string(fill = group_col) , color = "black") +
+                    geom_point(position = pos, color = "black")
+                    
+    }else{
+        function_say("Plotting style can be either 'color' or 'fill'.",type="error")
+    }
+
+
+    fig = fig + theme_bw() +
+                  theme(text = element_text(size = basic_font_size)) +
+                  labs(y = value_col)
+
+    if(plot_sample_label){
+        if(plotting_style=="color"){
+            fig = fig + geom_text(aes_string(color=group_col,label=sample_label),position = pos)
+        }else if(plotting_style=="fill"){
+            fig = fig + geom_text(aes_string(label=sample_label),position = pos,color="black")
+        }
+        
+    }
+
+    test_results = NULL ## prevent giving error when sig_test = F.
+    if (sig_test) {
+        res_sig_plot = df_plot %>% get_hypothesis_for_plot(group_col = group_col, value_col = value_col, 
+                                                           general_m = general_stat_method, pair_m = pairwise_stat_method) 
+        if(length(p_type) == 2) {
+            p_type = p_type[1]
+        }
+        if(length(sig_type) == 2) {
+            sig_type = sig_type[1]
+        }
+        label_type = paste0(p_type, sig_type)
+        label_type_sym = as.name(label_type)
+
+        if(hide_ns_for_plot) {
+            plot_pair_res = res_sig_plot$pair_res %>%
+                                filter(!!label_type_sym <= sig_thresh)
+        } else {
+            plot_pair_res = res_sig_plot$pair_res
+        }
+
+        if(verbose_test_res_for_plot) {
+            function_say("Print the test results for check.")
+            print(res_sig_plot)
+        }
+        fig = fig + stat_pvalue_manual(plot_pair_res, label = label_type, color = "black")
+        print(fig)
+
+        test_results = df_plot %>% publish_wilcox_test(group_col = group_col, value_col = value_col) %>%
+                                    .$merge
+    }
+
+
+    results = list("figure" = fig, "test_results" = test_results)
+    return(results)
+}
+
+
 
 close_all_device = function() {
   while (dev.cur() > 1) dev.off()
@@ -815,6 +999,15 @@ format_p=function(p,round=4,thresh=0.001){
         p_char=sprintf("P = %s",p)
     }
     return(p_char)
+}
+
+## plus
+format_scientific_plus = function(num, num_decimals) {
+  # Calculate the threshold based on the number of decimal places
+  threshold = 10^(-num_decimals)
+
+  # Use ifelse() instead of if() to handle vectors
+  ifelse(num <= threshold, format(num, scientific = T), round(num, num_decimals))
 }
 
 plot_factor_proportion = function(df, col_you_want_as_x, col_you_want_as_legend,mode=c("stack","mode")) {
@@ -841,7 +1034,7 @@ plot_factor_proportion = function(df, col_you_want_as_x, col_you_want_as_legend,
 
 ## ---------------------------------- rstatix -------------------------------------
 add_xy_position_plus=function(subseted_rstatix_test_obj,x="taxa",dodge=0.8){
-    library(rstatix)
+    quiet_library(rstatix)
     ## get y position
     rstatix_test_obj=subseted_rstatix_test_obj%>%add_y_position
     ## get data.frame
@@ -942,10 +1135,12 @@ split_train_validation_test=function(x,p_train=0.7,p_validate=0.1,p_test=0.2){
 
 ## ---------------------------------- bioinfo ------------------------------------
 library_metagenomic=function(){
-    library(phyloseq)
-    library(microbiome)
-    library(microViz)
+    quiet_library(phyloseq)
+    quiet_library(microbiome)
+    quiet_library(microViz)
 }
+
+
 
 id2name=function(df_otu,df_taxa,rowname_is_taxid=F,taxname_col="species"){
     ## check
@@ -963,7 +1158,7 @@ id2name=function(df_otu,df_taxa,rowname_is_taxid=F,taxname_col="species"){
     return(list(df_otu=df_otu,df_taxa=df_taxa))
 }
 
-get_kegg_pathway_desc=function(path="/home/junsheng/BIN/junsheng/IMPORT/KEGG_pathway_desc.tsv"){
+Functional_get_kegg_pathway_desc=function(path="/home/junsheng/BIN/junsheng/IMPORT/Functional_KEGG_pathway_desc.tsv"){
     if(file.exists(path)){
         print("Existed, read.")
         df_kegg=read_tsv(path)
@@ -976,19 +1171,52 @@ get_kegg_pathway_desc=function(path="/home/junsheng/BIN/junsheng/IMPORT/KEGG_pat
             select(number,ko,map,description)
         }
     return(df_kegg)
+}
+Functional_get_COG_desc=function(path="/home/junsheng/BIN/junsheng/IMPORT/Functional_COG_desc.tsv"){
+    if(file.exists(path)){
+        print("Existed, read.")
+        df_cog=read_tsv(path)
+    }else{
+        stop("Non existed.")
     }
-
+    return(df_cog)
+}
 ## ---------------------------------- metagenomics ----------------------------------
 #library(phyloseq)
 #library(microbiome)
 #library(microViz)
-transform_abs_to_rel=function(phy_obj){
-    phy_obj_rel=phy_obj%>%transform_sample_counts(function(x){x/sum(x)})
+
+phy_filter_taxa=phyloseq::subset_taxa
+
+phy_transform_to_clr = function(phy_obj){
+    # Check if the data is in ABS or REL format
+    data_type = phy_check_abs_rel_clr(phy_obj %>% otu_table)
+
+    # Proceed only if the data is in ABS or REL format
+    if (data_type %in% c("ABS", "REL")) {
+        phy_obj_clr = phy_obj %>% microbiome::transform(transform = "clr")
+        function_say(sprintf("Transformed %s to CLR.",data_type))
+        return(phy_obj_clr)
+    } else {
+        function_say("Only ABS or REL data can be transformed to CLR.", type = "stop")
+    }
+}
+
+phy_transform_abs_to_rel = function(phy_obj){
+
+    data_type = phy_check_abs_rel_clr(phy_obj %>% otu_table)
+    
+    if(data_type=="ABS"){
+        phy_obj_rel=phy_obj%>%transform_sample_counts(function(x){x/sum(x)})
+        function_say("Transform ABS to REL.")
+    }else{
+        function_say("Only support ABS to transform.",type="stop")
+    }
     return(phy_obj_rel)
 }
 
 
-aggregate_unclassified=function(phy_obj, level, unclassified_marker="unclassified"){
+phy_aggregate_unclassified_plus=function(phy_obj, level, unclassified_marker="unclassified"){
     
     phy_obj = aggregate_taxa(phy_obj, level)
     n_taxa_before_merge=phy_obj%>%tax_table%>%nrow
@@ -1007,14 +1235,14 @@ aggregate_unclassified=function(phy_obj, level, unclassified_marker="unclassifie
     phy_obj=aggregate_taxa(phy_obj, level)
     n_taxa_after_merge=phy_obj%>%tax_table%>%nrow
     
-    print(sprintf("Merge all the OTUs in %s level to a specific OTU called '%s', %s taxa before merge and %s taxa after that",level,unclassified_marker,n_taxa_before_merge,n_taxa_after_merge))
+    function_say(sprintf("Merge all the OTUs in %s level to a specific OTU called '%s', %s taxa before merge and %s taxa after that",level,unclassified_marker,n_taxa_before_merge,n_taxa_after_merge))
     return(phy_obj)
 }
 
-aggregate_rare_plus = function (phy_obj, level, unclassified_marker="unclassified", detection, prevalence, abundance, include_lowest=F,...){
+phy_aggregate_rare_plus = function (phy_obj, level, unclassified_marker="unclassified", detection, prevalence, abundance, include_lowest=F,...){
 
     ## tackle unclassified OTU
-    phy_obj=phy_obj%>%aggregate_unclassified(level,unclassified_marker)
+    phy_obj=phy_obj%>%phy_aggregate_unclassified_plus(level,unclassified_marker)
     
     
     ## aggregate others, merge them into 1 OTU
@@ -1047,18 +1275,21 @@ aggregate_rare_plus = function (phy_obj, level, unclassified_marker="unclassifie
     return(phy_filtered)
 
 }
-aggregate_taxa_plus=function(phy_obj,level,unclassified_marker="unclassified",verbose=F){
+
+phy_aggregate_taxa_plus=function(phy_obj,level,unclassified_marker="unclassified",verbose=F){
     ## compare to aggregate_taxa, aggregate_taxa_plus will first merge all the OTUs with the specific level==unclassified_marker into 1
     #### Why we need to mutate all the columns to unclassified_marker? It's because although if a taxa's Species level are unclassified, their Order or Phylum or even Superkingdom may different
     #### Then they will be treated as different in aggregate_taxa.
-    phy_obj=phy_obj%>%aggregate_unclassified(level,unclassified_marker)
+    phy_obj=phy_obj%>%phy_aggregate_unclassified_plus(level,unclassified_marker)
     phy_obj=phy_obj%>%aggregate_taxa(level,verbose)
 }
 
-aggregate_top_taxa_plus = function(phy_obj, top, level, unclassified_marker="unclassified",other_marker="Other",only_keep_level_aggregate=F) {
+phy_aggregate_top_taxa_plus = function(phy_obj, top, level, unclassified_marker="unclassified", aggregate_unclassified_plus=F,other_marker="Other",only_keep_level_aggregate=F) {
     ## tackle unclassified OTU
-    phy_obj=phy_obj%>%aggregate_unclassified(level,unclassified_marker)
-
+    if(aggregate_unclassified_plus){ #If T, that will use phy_aggregate_unclassified to aggregate the unclassified
+        phy_obj=phy_obj%>%phy_aggregate_unclassified_plus(level,unclassified_marker)
+    }
+    
     ## tackle others
     phy_obj = aggregate_taxa(phy_obj, level)
 
@@ -1082,9 +1313,9 @@ aggregate_top_taxa_plus = function(phy_obj, top, level, unclassified_marker="unc
     return(phy_obj)
 }
 
-check_abs_rel_clr=function(df_otu, round_precision=10){
-
-    df_otu=df_otu%>%data.frame
+phy_check_abs_rel_clr=function(df_otu, round_precision=10){
+    function_say("Checking data type, ABS, REL or CLR.")
+    df_otu = df_otu %>% as.data.frame_plus
 
     if( all(df_otu >= 0) & any(df_otu > 1)){
         marker="ABS"
@@ -1094,21 +1325,49 @@ check_abs_rel_clr=function(df_otu, round_precision=10){
         colmeans_sum=df_otu %>% colMeans %>% sum %>% round(round_precision)
         if(colmeans_sum != 0){
             print_t="Maybe trim df_otu in CLR, or even not a CLR. Please check cautiously."
-            warning(print_t)
-            pretty_print(print_t)
+            function_say(print_t,type="warning")
         }
         marker="CLR"
     }else{
         marker="Unknown"
+        function_say("Not ABS or REL or CLR! Please check df_otu!!!!!!!!!!!!",type="warning")
     }
-    pretty_print(sprintf("Detect %s",marker))
+    function_say(sprintf("Detect %s",marker))
     return(marker)
 }
 
+phy_filter_unclassified = function(phy_obj,level="species",unclassified_marker="unclassified",strict=T){
+    ## to dataframe
+    df_taxa=tax_table(phy_obj)%>%as.data.frame_plus
+    if(strict){
+        ## select from the first to a specific column of that level
+        exp_obj=sprintf("1:%s",level)
+        
+        df_taxa=df_taxa%>%select(!!rlang::parse_expr(exp_obj))
+        
+        ## all should not be == unclassififed_marker
+        #print(df_taxa%>%colnames)
+        df_taxa=df_taxa%>%mutate_all(~ifelse(.x==unclassified_marker,NA, .x))
+        df_taxa_no_unclassified=df_taxa%>%drop_na
+    }else{
+        ## the column should not be == unclassified_marker
+        
+        df_taxa[[level]]=ifelse(df_taxa[[level]]==unclassified_marker,NA,df_taxa[[level]])
+        df_taxa_no_unclassified=df_taxa%>%drop_na(all_of(level))
+    }
+    keep_taxa_name=df_taxa_no_unclassified%>%rownames
+
+    #print(remove_taxa)
+    phy_obj=prune_taxa(keep_taxa_name,phy_obj)
+    return(phy_obj)
+}
+
+
 ## ---------------------------------- publish version of test function ----------------------------------
-publish_t_test = function(.data, group_col, value_col, strata_col = NULL, paired_test = F, var_equal=F, adj_method = "fdr", digit_round = 3) {
+publish_t_test = function(.data, group_col, value_col, strata_col = NULL, desc_type = c("mean","sd"),paired_test = F, var_equal=F, adj_method = "fdr", digit_round = 3) {
+    function_say("Hey!")
     # library
-    library(rstatix)
+    quiet_library(rstatix)
     # Rename columns for the final table
     rename_adj_method = paste0("p.adj", " (", adj_method, ")")
     rename_t = "t-value"
@@ -1162,12 +1421,26 @@ publish_t_test = function(.data, group_col, value_col, strata_col = NULL, paired
                                         mutate(!!rename_ci:=sprintf("[%s, %s]",conf.low,conf.high))%>%
                                         select(-c(estimate,method,alternative,conf.low,conf.high))
 
-    # Get summary statistics (Mean and SD) for each group
-    stat_col = "Mean ± SD"
+    # Get summary statistics (Mean and SD/sem) for each group
+    function_say(sprintf("Use %s for description", desc_type))
+    if (desc_type[1] !="mean"){
+        function_say("When using t-test, you should describe the data by mean first. So you need to specify the first element in $desc_type as 'mean'.",type="error")
+    }
+    if(desc_type[2]=="sd"){
+        stat_col = "Mean ± SD"
+    }else if (desc_type[2]=="se"){
+        stat_col = "Mean ± s.e.m"
+    }else{
+        function_say("The second statistics can only be 'sd' or 'se'",type="error")
+    }
+    stat_col_sym = stat_col %>% as.name
+    sd_se_col_sym = desc_type[2] %>% as.name
+    
     df_summary_stats = .data %>% group_by(!!strata_col_sym, !!group_col_sym) %>%
-                                get_summary_stats(!!value_col_sym,type = "mean_sd", show = c("mean", "sd")) %>%
+                                get_summary_stats(!!value_col_sym,type = "common", show = desc_type) %>%
                                 mutate_if(is.numeric, ~round(.x, digit_round)) %>%
-                                mutate(!!stat_col := sprintf("%s ± %s", mean, sd), !!group_col_sym := sprintf("%s (%s)", !!group_col_sym, stat_col)) %>%
+                                mutate(!!stat_col_sym := sprintf("%s ± %s", mean, !!sd_se_col_sym)) %>%
+                                mutate(!!group_col_sym := sprintf("%s (%s)", !!group_col_sym, stat_col)) %>%
                                 pivot_wider(id_cols = strata_col, names_from = group_col, values_from = stat_col)
 
     # Perform a full join on strata_col and then relocate specific columns to the end
@@ -1178,13 +1451,14 @@ publish_t_test = function(.data, group_col, value_col, strata_col = NULL, paired
     }
     df_final=df_final%>%relocate(all_of(c(rename_t, rename_p, rename_adj_method, rename_ci)), .after = last_col())
 
-               
+    function_say("Bye.")
     return(list("test"=df_t_test_res,"desc"=df_summary_stats,"merge"=df_final))
 }
 
 publish_wilcox_test = function(.data, group_col, value_col, strata_col = NULL,paired_test = F, adj_method = "fdr", digit_round = 3) {
+    function_say("Hey!")
     # library
-    library(rstatix)
+    quiet_library(rstatix)
     library_parallel()
     # rename info
     rename_adj_method = paste0("p.adj"," ","(",adj_method,")")
@@ -1262,14 +1536,14 @@ publish_wilcox_test = function(.data, group_col, value_col, strata_col = NULL,pa
     df_final=df_final%>%relocate(all_of(c(rename_w, rename_p, rename_adj_method)), .after = last_col())
 
 
-
+    function_say("Bye.")
     return(list("test"=df_wilcox_res,"desc"=df_summary_stats,"merge"=df_final))
 }
 
 publish_adonis = function(response_var, input_matrix, distance_method = "bray", digit_round = 3) {
   # Load required libraries
-  library(vegan)
-  library(broom)
+  quiet_library(vegan)
+  quiet_library(broom)
   
   # Check if the input_matrix is a distance matrix
   if (class(input_matrix) != "dist") {
@@ -1301,7 +1575,7 @@ publish_mantel_test = function(df_matrix1, df_matrix2,
                               ) {
 
     # Load the required library
-    library(vegan)
+    quiet_library(vegan)
 
     # Calculate the distance matrices
     dist_matrix1 = vegdist(df_matrix1, method = distance_method1,na.rm=T)

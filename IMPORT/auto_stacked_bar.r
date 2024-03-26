@@ -5,11 +5,14 @@ auto_stacked_bar=function(phy_obj_abs,
                             level,
                             group_col=NULL,
                             top=5,
-                            unclassified_value="unclassified",## this value is for sorting, keep the "unclassified_value" to the end
-                            stats_test=T,
+                            unclassified_value="unclassified",## this value is for 1. sorting, keep the "unclassified_value" to the end; 2. Or remove the "unclassified"
+                            remove_unclassified=F,
+                            stats_test=F,
                             line_size=0,
+                            basic_font_size=10,
                             line_color="black",
                             plot_x_ticks_label=F,
+                            vertical_x_label=T,
                             palette="npg",
                             filename_prefix="default",
                             save_dir="default",
@@ -22,22 +25,43 @@ auto_stacked_bar=function(phy_obj_abs,
     
 
     # check marker
-    marker = check_abs_rel_clr(phy_obj_abs%>%otu_table%>%as.data.frame_plus)
+    marker = phy_check_abs_rel_clr(phy_obj_abs%>%otu_table%>%as.data.frame_plus)
 
     if(marker != "ABS") {
     stop("Only ABS can plot Stacked bar.")
     }
 
-    ## phy_obj
-    phy_obj_top=aggregate_top_taxa_plus(phy_obj_abs,top,level,only_keep_level_aggregate=T) #### here will create a new OTU call "Other"
-    phy_obj_top_rel=phy_obj_top%>%transform_abs_to_rel
+    print(sprintf("The unclassified value you specified is '%s', all this value among the whole taxa table will be treated as unclassified.",unclassified_value))
     
+    ## Aggregate to TOP
+    phy_obj_top=phy_aggregate_top_taxa_plus(phy_obj_abs,top,level,only_keep_level_aggregate=T) #### here will create a new OTU call "Other"
+
+    ## Whether to remove the "unclassified"?
+    level_sym = level %>% as.name
+
+    if(remove_unclassified){
+        print(sprintf("Will remove the unclassified taxa in %s level",level))
+        phy_obj_top = phy_obj_top %>% phy_filter_unclassified(level = level,unclassified_marker = unclassified_value,strict = F)
+    }
+
+    ## get the relative (IF decided to remove "unclassified, should remove before transform to relative.")
+    phy_obj_top_rel=phy_obj_top%>%phy_transform_abs_to_rel
+    
+
     ## df_otu
     df_top_abs=phy_obj_top%>%abundances%>%as.data.frame_plus
     df_top_rel=phy_obj_top_rel%>%abundances%>%as.data.frame_plus%>%mutate_all(~round(.x,4))
 
     ## df_meta
-    df_meta=phy_obj_abs%>%sample_data%>%as.data.frame_plus(rownames_to_column=T,var="sample")
+    df_meta = try(sample_data(phy_obj_abs)%>%
+                        as.data.frame_plus(make_rownames_to_column=T,var="sample"), 
+                        silent = TRUE)
+
+    if ("try-error" %in% class(df_meta)) {
+        function_say("Can't get df_meta, make one.",type="warning")
+        df_meta = data.frame(sample = colnames(otu_table(phy_obj_abs)))
+    }
+
 
     ## df_otu_longer
     df_top_abs_longer=df_top_abs%>%pivot_longer_wrapper(id_col_index = 0,id_col_name = level,names_to = "sample",values_to = "readcounts")%>%
@@ -46,11 +70,21 @@ auto_stacked_bar=function(phy_obj_abs,
     df_top_rel_longer=df_top_rel%>%pivot_longer_wrapper(id_col_index = 0,id_col_name = level,names_to = "sample",values_to = "relative_abundance")%>%
                                     left_join(df_meta)
 
+
+
     ## fix the order of "Other" & "unclassified"
     unique_levels = unique(df_top_abs_longer[[level]])
-    other_unclassified = c("Other", unclassified_value)
+    if(remove_unclassified){
+        other_unclassified = c("Other")
+    }else{
+        other_unclassified = c("Other", unclassified_value)
+    }
+    
     unique_levels_without_other_unclassified = setdiff(unique_levels, other_unclassified)
+
     final_levels = c(unique_levels_without_other_unclassified, other_unclassified)
+
+
     df_top_abs_longer[[level]] = factor(df_top_abs_longer[[level]], levels = final_levels)
     df_top_rel_longer[[level]] = factor(df_top_rel_longer[[level]], levels = final_levels)
 
@@ -58,9 +92,8 @@ auto_stacked_bar=function(phy_obj_abs,
     con1=(!is.null(group_col))
     con2=stats_test
     if(con1&con2){
-
-        df_test_rel=publish_wilcox_test(df_top_rel_longer,group_col,"relative_abundance",level)
-
+        df_test_rel_wilcox=publish_wilcox_test(df_top_rel_longer,group_col,"relative_abundance",level) %>% .$merge
+        df_test_rel_t=publish_t_test(df_top_rel_longer,group_col,"relative_abundance",level) %>% .$merge
     #    test_abs_list=(
     #                    phy_obj_top%>%ancombc2(fix_formula=group_col,
     #                                                assay_name="count",global=F,pairwise=T,dunnet=F,trend=F,
@@ -77,42 +110,55 @@ auto_stacked_bar=function(phy_obj_abs,
     #    }
     }else{
     #    df_test_abs=NULL
-        df_test_rel=NULL
+        df_test_rel_wilcox=NULL
+        df_test_rel_t=NULL
     }
 
     ## fig
-    fig_abs=df_top_abs_longer%>%ggbarplot(x = "sample",y="readcounts",fill = level,palette=palette,width=1,size=line_size,color=line_color)
-    fig_rel=df_top_rel_longer%>%ggbarplot(x = "sample",y="relative_abundance",fill = level,palette=palette,width=1,size=line_size,color=line_color)
+    fig_abs=df_top_abs_longer%>%ggbarplot(x = "sample",y="readcounts",fill = level,palette=palette,width=1,size=line_size,color=line_color)+
+                                    labs(y="Readcounts")
+    fig_rel=df_top_rel_longer%>%ggbarplot(x = "sample",y="relative_abundance",fill = level,palette=palette,width=1,size=line_size,color=line_color)+
+                                    labs(y="Relative abundance")
     
-    if(!is.null(group_col)){
-        form=sprintf("~%s",group_col)%>%as.formula
-        fig_abs=fig_abs+facet_wrap(form,scales="free_x",nrow = 1)
-        fig_rel=fig_rel+facet_wrap(form,scales="free_x",nrow = 1)
-    }
+#    if(!is.null(group_col)){
+#        form=sprintf("~%s",group_col)%>%as.formula
+#        fig_abs=fig_abs+facet_wrap(form,scales="free_x",nrow = 1)
+#        fig_rel=fig_rel+facet_wrap(form,scales="free_x",nrow = 1)
+#    }
     fig_abs=fig_abs+scale_y_continuous(expand = c(0, 0))
     fig_rel=fig_rel+scale_y_continuous(expand = c(0, 0))
+
+    # theme
+    fig_abs=fig_abs + theme(text = element_text(size = basic_font_size))
+    fig_rel=fig_rel + theme(text = element_text(size = basic_font_size))
 
     if(!plot_x_ticks_label){
         fig_abs=fig_abs + theme(axis.text.x = element_blank(),axis.title.x = element_blank(),axis.ticks.x = element_blank())
         fig_rel=fig_rel + theme(axis.text.x = element_blank(),axis.title.x = element_blank(),axis.ticks.x = element_blank())
     }
 
+    if(vertical_x_label){
+        fig_abs = fig_abs + theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+        fig_rel = fig_rel + theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+    }
     
     ## save fig and df
     abs_name=sprintf("%s_ABS_TOP%s_%s",filename_prefix,top,level)
     rel_name=sprintf("%s_REL_TOP%s_%s",filename_prefix,top,level)
-    abs_name_test=paste0("Statistics_test","_",abs_name)
-    rel_name_test=paste0("Statistics_test","_",rel_name)
+
+    rel_name_test_wilcox=paste0("Statistics_test_wilcox","_",rel_name)
+    rel_name_test_t=paste0("Statistics_test_t","_",rel_name)
     
-    fig_abs%>%ggsave_wrap(fig_dir = save_dir,fig_name = abs_name,fig_fmt=fig_fmt,size = size, prompt = T)
-    fig_rel%>%ggsave_wrap(fig_dir = save_dir,fig_name = rel_name,fig_fmt = fig_fmt,size = size, prompt = T)
+    fig_abs%>%ggsave_wrap(file_name = abs_name,save_dir = save_dir,file_fmt=fig_fmt,size = size, prompt = T)
+    fig_rel%>%ggsave_wrap(file_name = rel_name,save_dir = save_dir,file_fmt = fig_fmt,size = size, prompt = T)
     
-    write_df_wrap(df_top_abs, df_dir = save_dir, df_name = abs_name, "tsv", rowname = "#OTU ID", prompt = T)
-    write_df_wrap(df_top_rel, df_dir = save_dir, df_name = rel_name, "tsv", rowname = "#OTU ID", prompt = T)
+    write_df_wrap(df_top_abs, file_name = abs_name, save_dir = save_dir,  "tsv", rowname = "#OTU ID", prompt = T)
+    write_df_wrap(df_top_rel, file_name = rel_name, save_dir = save_dir, "tsv", rowname = "#OTU ID", prompt = T)
     
-    if(!is.null(df_test_rel)){
+    if(!is.null(df_test_rel_wilcox)){
      #   write_df_wrap(df_test_abs, df_dir = save_dir, df_name = abs_name_test, "tsv", prompt = T)
-        write_df_wrap(df_test_rel, df_dir = save_dir, df_name = rel_name_test, "tsv", rowname = "#OTU ID", prompt = T)
+        write_df_wrap(df_test_rel_wilcox, file_name = rel_name_test_wilcox, save_dir = save_dir,  "xlsx", rowname = "#OTU ID", prompt = T)
+        write_df_wrap(df_test_rel_t, file_name = rel_name_test_t, save_dir = save_dir,  "xlsx", rowname = "#OTU ID", prompt = T)
     }
     return(list(fig_abs,fig_rel))
 }

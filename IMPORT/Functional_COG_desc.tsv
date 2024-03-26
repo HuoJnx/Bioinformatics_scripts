@@ -1,0 +1,27 @@
+functional_terms	description	full_name
+J	"Translation, ribosomal structure and biogenesis"	"Translation, ribosomal structure and biogenesis (J)"
+A	RNA processing and modification	RNA processing and modification (A)
+K	Transcription	Transcription (K)
+L	"Replication, recombination and repair"	"Replication, recombination and repair (L)"
+B	Chromatin structure and dynamics	Chromatin structure and dynamics (B)
+D	"Cell cycle control, cell division, chromosome partitioning"	"Cell cycle control, cell division, chromosome partitioning (D)"
+Y	Nuclear structure	Nuclear structure (Y)
+V	Defense mechanisms	Defense mechanisms (V)
+T	Signal transduction mechanisms	Signal transduction mechanisms (T)
+M	Cell wall/membrane/envelope biogenesis	Cell wall/membrane/envelope biogenesis (M)
+N	Cell motility	Cell motility (N)
+Z	Cytoskeleton	Cytoskeleton (Z)
+W	Extracellular structures	Extracellular structures (W)
+U	"Intracellular trafficking, secretion, and vesicular transport"	"Intracellular trafficking, secretion, and vesicular transport (U)"
+O	"Posttranslational modification, protein turnover, chaperones"	"Posttranslational modification, protein turnover, chaperones (O)"
+X	"Mobilome: prophages, transposons"	"Mobilome: prophages, transposons (X)"
+C	Energy production and conversion	Energy production and conversion (C)
+G	Carbohydrate transport and metabolism	Carbohydrate transport and metabolism (G)
+E	Amino acid transport and metabolism	Amino acid transport and metabolism (E)
+F	Nucleotide transport and metabolism	Nucleotide transport and metabolism (F)
+H	Coenzyme transport and metabolism	Coenzyme transport and metabolism (H)
+I	Lipid transport and metabolism	Lipid transport and metabolism (I)
+P	Inorganic ion transport and metabolism	Inorganic ion transport and metabolism (P)
+Q	"Secondary metabolites biosynthesis, transport and catabolism"	"Secondary metabolites biosynthesis, transport and catabolism (Q)"
+R	General function prediction only	General function prediction only (R)
+S	Function unknown	Function unknown (S)

@@ -5,97 +5,132 @@ library_parallel()
 library(ggpubr)
 
 
-auto_alpha_boxplot=function(phy_obj,
-                    group_col="group",
-                    index_list=c("Shannon","InvSimpson"),
-                    sig_test=T,
-                    plot_sample_label=T,
-                    sample_label="sample",
-                    save_dir=".",
-                    filename_prefix="",
-                    fig_fmt="svg",
-                    size=c(8,8)){
+auto_alpha_boxplot = function(phy_obj,
+                    group_col = NULL,
+                    index_list = c("Shannon", "InvSimpson"),
+                    plotting_style = "color",
+                    sig_test = T, 
+                    p_type="p",
+                    sig_type=".signif",
+                    sig_thresh=0.05,
+                    hide_ns_for_plot=F,
+                    verbose_test_res_for_plot=T,
+                    plot_sample_label = T,
+                    sample_label = "sample", 
+                    basic_font_size=10, 
+                    save_dir = ".", 
+                    filename_prefix = "",
+                    fig_fmt = "svg",
+                    size = c(8, 8)) {
 
     # get data
-    df_otu=otu_table(phy_obj)%>%data.frame
-    df_meta=sample_data(phy_obj)%>%data.frame
+    df_otu = otu_table(phy_obj) %>% data.frame()
+    df_meta = sample_data(phy_obj) %>% data.frame()
     
-    # fix the group col of df_meta
-    df_meta[[group_col]]=df_meta[[group_col]]
+    # Check if group_col is NULL
+    if (is.null(group_col)) {
+        sig_test = F
+        df_meta$group = "All_Samples"
+        group_col = "group"
+    }
     
-    # check marker
-    marker = check_abs_rel_clr(df_otu)
-
-    if(marker != "REL") {
-    stop("Only REL can plot this curve")
+    # Check marker
+    marker = phy_check_abs_rel_clr(df_otu)
+    if (marker != "REL") {
+        stop("Only REL can plot boxplot.")
     }
 
-
-    # Calculate alpha-diversity using phyloseq::estimate_richness, support c("Observed", "Chao1", "ACE", "Shannon", "Simpson", "InvSimpson", "Fisher")
-    richness_df = estimate_richness(phy_obj, measures = index_list)%>%
+    # Calculate alpha-diversity
+    richness_df = estimate_richness(phy_obj, measures = index_list) %>%
                     rownames_to_column("sample")
 
-
     # Merge with metadata
-    df_plot = df_meta %>% rownames_to_column("sample")
-    df_plot = df_plot%>%left_join(richness_df, by = "sample")
-    df_plot %>% write_df_wrap(df_name="All_raw_alpha_diveristy",df_dir=save_dir)
+    df_plot = df_meta %>% rownames_to_column("sample") %>%
+              left_join(richness_df, by = "sample")
+    write_df_wrap(df_plot, file_name="All_raw_alpha_value_for_plotting", save_dir=save_dir,file_fmt="xlsx")
+
+    fig_list = list()
+    for (ind in index_list) {
+        function_say(sprintf("Plotting figures and getting statistics for %s.",ind))
+        # Call ggbox_points_pairwise_plus function
+        fig_table=ggbox_points_pairwise_plus(df_plot=df_plot,
+                                                      value_col=ind,
+                                                      group_col=group_col,
+                                                      plotting_style = plotting_style,
+                                                      sig_test=sig_test,
+                                                      general_stat_method="kruskal",
+                                                      pairwise_stat_method = "wilcox", 
+                                                      p_type = p_type, 
+                                                      sig_type = sig_type, 
+                                                      sig_thresh = sig_thresh, 
+                                                      hide_ns_for_plot = hide_ns_for_plot, 
+                                                      plot_sample_label = plot_sample_label,
+                                                      sample_label = sample_label,
+                                                      verbose_test_res_for_plot = verbose_test_res_for_plot, 
+                                                      basic_font_size = basic_font_size
+          )
+
+        # Extract the figure and test results
+        fig=fig_table$figure
+        df_test=fig_table$test_results
 
 
-    fig_list=list()
-    for(ind in index_list){
-        
-        ## real plot
-        pos = position_jitter(width = 0.5, seed = 1)
-        fig=ggplot(df_plot,aes_string(x=group_col,y=ind,color=group_col))+
-                geom_point(position = pos)+
-                geom_boxplot(outlier.shape=NA,fill=NA)+
-                theme_bw()
 
-        #### plot label
-        if(plot_sample_label){
-            fig=fig+geom_text(aes_string(label=sample_label),position=pos)
-        }
-        #### plot hypothesis test
-        if(sig_test){
-            res_sig=df_plot%>%get_hypothesis(group_col,ind)
-            #fig=fig+labs(subtitle=res_sig$general_text)
-            fig=fig+stat_pvalue_manual(res_sig$pair_res,hide.ns=T)
+        # save fig and df
+        df_name = sprintf("%s_%s_%s",filename_prefix,marker,ind)
+        fig_name = sprintf("%s_%s_%s",filename_prefix,marker,ind)
+
+        # Optionally save test results
+        if (sig_test && !is.null(df_test)) {
+            write_df_wrap(df_test, file_name=df_name, save_dir=save_dir,file_fmt="xlsx")
             
-            ## save stats res
-            df_name = sprintf("%s_%s_%s",filename_prefix,marker,ind)
-            res_sig$pair_res%>%as.data.frame_plus%>%write_df_wrap(df_name=df_name,df_dir=save_dir)
         }
 
-        
-        ## save
-        fig_name=sprintf("%s_%s_%s",filename_prefix,marker,ind)
-        ggsave_wrap(fig,save_dir,fig_name =fig_name,fig_fmt = fig_fmt,size=size)
-        fig_list[[ind]]=fig
+        # Save the figure
+        ggsave_wrap(fig, file_name = fig_name, save_dir=save_dir, file_fmt = fig_fmt, size = size)
+
+        # Store the figure in the list
+        fig_list[[ind]] = fig
+
     }
     return(fig_list)
 }
 
 
+
 auto_alpha_rarefaction_curve = function(phy_obj, 
-                                group_col="group",
+                                group_col=NULL,
                                 sample_size=list("from"=0,"by"=5000,"length.out"=10),
                                 index_list=c("Chao1", "Observed", "ACE"),
+                                sig_test=T,
+                                test_func=publish_wilcox_test,
+                                basic_font_size = 12,
                                 save_dir=".", 
                                 filename_prefix="", 
                                 fig_fmt="svg", 
                                 size=c(8,8)) {
+    # set fig size
+    set_fig_size(size_obj=size)
 
     # get data
     df_otu=otu_table(phy_obj)%>%data.frame
     df_meta=sample_data(phy_obj)%>%data.frame
     
-    # fix the group col of df_meta
-    df_meta[[group_col]]=df_meta[[group_col]]
-    df_meta=df_meta%>%select(all_of(group_col))
+    # Check if group_col is NULL, if so, treat all samples as a single group
+    if (is.null(group_col)) {
+        sig_test = F
+        df_meta$group = "All_Samples"
+        group_col = "group"
+    } else {
+        # Fix the group col of df_meta
+        #df_meta[[group_col]] = df_meta[[group_col]]
+        df_meta=df_meta%>%select(all_of(group_col))
+    }
+
+    
 
     # check marker
-    marker = check_abs_rel_clr(df_otu)
+    marker = phy_check_abs_rel_clr(df_otu)
 
     if(marker != "ABS") {
     stop("Only ABS can plot this curve")
@@ -126,15 +161,18 @@ auto_alpha_rarefaction_curve = function(phy_obj,
         save_name = sprintf("%s_%s_%s", filename_prefix, marker, ind)
 
         ## hypothesis test
-        df_test = (df_plot_ind %>% publish_wilcox_test(group_col=group_col, value_col="value"))$merge
-        write_df_wrap(df_test,df_name=save_name,df_dir=save_dir)
-
+        if(sig_test){
+            df_test = (df_plot_ind %>% test_func(group_col=group_col, value_col="value"))$merge
+            write_df_wrap(df_test,file_name=save_name,save_dir=save_dir,file_fmt="xlsx")
+        }
         ## plot
-        fig = df_plot_ind %>% ggline(x = "Number of Sequences", y = "value", color = group_col, add = "mean_se") +
-                                   labs(y = sprintf("%s index", ind))
+        fig = df_plot_ind %>% ggline(x = "Number of Sequences", y = "value", color = group_col, add = "mean_se") + 
+                                    theme_bw() +
+                                    theme(text = element_text(size = basic_font_size),axis.text.x = element_text(angle = 90)) +
+                                    labs(y = sprintf("%s index", ind))
         fig_list[[ind]] = fig
-      
-        ggsave_wrap(fig, save_dir, fig_name = save_name, fig_fmt = fig_fmt, size = size)
+        
+        ggsave_wrap(fig, file_name = save_name, save_dir=save_dir, file_fmt = fig_fmt, size = size)
 
 
 
