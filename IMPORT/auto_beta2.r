@@ -3,7 +3,7 @@ library(vegan)
 library(ape)
 library(pairwiseAdonis) 
 
-plot_basic_mds=function(mds_obj,df_meta,group_col,shape_col=NULL,stat_ellipse=T,plot_sample_label=F,sample_label_col="sample",label_size=5,basic_text_size=15){
+plot_basic_mds=function(mds_obj,df_meta,group_col,shape_col=NULL,stat_ellipse=T,plot_sample_label=F,sample_label_col="sample", point_size = 2,basic_text_size=15){
     ## get argvs if use this function directly
     if(is.null(shape_col)){
         shape_col=group_col
@@ -25,7 +25,7 @@ plot_basic_mds=function(mds_obj,df_meta,group_col,shape_col=NULL,stat_ellipse=T,
 
     fig={
             ggplot(plot_obj,mapping = aes_string(x=xy_real[1],y=xy_real[2],color=group_col,shape=shape_col))+
-                geom_point()+
+                geom_point(size = point_size)+
                 labs(x=xylabs[1],y=xylabs[2])+
                 theme_bw(base_size=basic_text_size)
         }
@@ -37,7 +37,7 @@ plot_basic_mds=function(mds_obj,df_meta,group_col,shape_col=NULL,stat_ellipse=T,
     }
     ## if plot sample name
     if(plot_sample_label){
-        fig = fig + geom_text(aes_string(label=sample_label_col),size=label_size)
+        fig = fig + geom_text(aes_string(label=sample_label_col))
     }
     return(fig)
 }
@@ -143,7 +143,7 @@ mds_plus=function(dis_obj,NMDS=F){
 
 
 auto_beta=function(phy_obj=NULL,dist_obj=NULL,df_meta=NULL,group_col=NULL,shape_col=NULL,plot_sample_label=F,sample_label_col="sample",
-                    label_size=5,basic_text_size=15,distance="bray",
+                    point_size = 2, basic_text_size=15, distance="bray",
                     sig_test=T, test_method="adonis",stat_ellipse=T, color_vec=NULL,fix_x=NULL,fix_y=NULL,
                     directly_save=T,filename_prefix="default",save_dir="default",fig_fmt="svg",size=c(8,8)){
     
@@ -201,29 +201,31 @@ auto_beta=function(phy_obj=NULL,dist_obj=NULL,df_meta=NULL,group_col=NULL,shape_
 
     # hypothesis test
     if(sig_test){
-        if(test_method=="adonis"){
-            list_df=adonis_from_dist_obj(dist_obj,df_meta,group_col,pairwise=T,p.adjust.m="BH")
-        }else if(test_method=="anosim"){
-            list_df=anosim_from_dist_obj(dist_obj,df_meta,group_col,pairwise=T,p.adjust.m="BH")
+        if(test_method == "adonis"){
+            list_df = adonis_from_dist_obj(dist_obj,df_meta,group_col,pairwise=T,p.adjust.m="BH")
+        }else if(test_method == "anosim"){
+            list_df = anosim_from_dist_obj(dist_obj,df_meta,group_col,pairwise=T,p.adjust.m="BH")
         }else{
             stop("Only support adonis or anosim.")
         }
-        df_adon_gen=list_df$global%>%data.frame(check.names = F)%>%mutate_if(is.double,~round(.x,4))
-        df_adon_pair=list_df$pairwise
+        df_test_gen = list_df$global%>%data.frame(check.names = F) %>% mutate_if(is.double,~round(.x,4))
+        df_test_pair = list_df$pairwise
 
         df_name1=sprintf("%s_%s_%s_test_general",filename_prefix,marker,distance)
 
         if(directly_save){
-            write_df_wrap(df_adon_gen,file_name = df_name1,save_dir = save_dir,file_fmt="tsv",prompt = T)
+            write_df_wrap(df_test_gen,file_name = df_name1,save_dir = save_dir,file_fmt="tsv",prompt = T)
         }
-        if(!is.null(df_adon_pair)){
-            df_adon_pair=df_adon_pair%>%mutate_if(is.double,~round(.x,4))
-            df_name2=sprintf("%s_%s_%s_test_pair",filename_prefix,marker,distance)
+        if(!is.null(df_test_pair)){
+            df_test_pair = df_test_pair %>% mutate_if(is.double,~round(.x,4))
+            df_name2 = sprintf("%s_%s_%s_test_pair",filename_prefix,marker,distance)
             if(directly_save){
-                write_df_wrap(df_adon_pair,file_name = df_name2,save_dir = save_dir,file_fmt="tsv",prompt = T)
+                write_df_wrap(df_test_pair,file_name = df_name2,save_dir = save_dir,file_fmt = "tsv",prompt = T)
             }
         }
     }else{
+        df_test_gen = NULL
+        df_test_pair = NULL
         print("》》Statistics test turned off.")
     }
     
@@ -247,8 +249,8 @@ auto_beta=function(phy_obj=NULL,dist_obj=NULL,df_meta=NULL,group_col=NULL,shape_
     # plot ordination
     ## basic plot
 
-    basic_mds_fig=plot_basic_mds(mds_obj,df_meta=df_meta,group_col=group_col,shape_col=shape_col,stat_ellipse=stat_ellipse,plot_sample_label=plot_sample_label,sample_label_col=sample_label_col,label_size=label_size,basic_text_size=basic_text_size)
-    basic_nmds_fig=plot_basic_mds(nmds_obj,df_meta=df_meta,group_col=group_col,shape_col=shape_col,stat_ellipse=stat_ellipse,plot_sample_label=plot_sample_label,sample_label_col=sample_label_col,label_size=label_size,basic_text_size=basic_text_size)
+    basic_mds_fig=plot_basic_mds(mds_obj,df_meta=df_meta,group_col=group_col,shape_col=shape_col,stat_ellipse=stat_ellipse,plot_sample_label=plot_sample_label,sample_label_col=sample_label_col, point_size = point_size, basic_text_size=basic_text_size)
+    basic_nmds_fig=plot_basic_mds(nmds_obj,df_meta=df_meta,group_col=group_col,shape_col=shape_col,stat_ellipse=stat_ellipse,plot_sample_label=plot_sample_label,sample_label_col=sample_label_col, point_size = point_size, basic_text_size=basic_text_size)
     
     ## if plot statistics
     if(sig_test){
@@ -289,5 +291,5 @@ auto_beta=function(phy_obj=NULL,dist_obj=NULL,df_meta=NULL,group_col=NULL,shape_
     }
 
     ## return
-    return(list(dist_obj=dist_obj,MDS=fig_mds,NMDS=fig_nmds,figname=c(figname_mds,figname_nmds),save_dir=save_dir))
+    return(list(figs = list("MDS" = fig_mds, "NMDS" = fig_nmds),dist_obj=dist_obj, MDS=fig_mds, NMDS=fig_nmds, test_general = df_test_gen, test_paired = df_test_pair, figname=c(figname_mds,figname_nmds),save_dir=save_dir))
 }

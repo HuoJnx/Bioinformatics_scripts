@@ -8,6 +8,7 @@ auto_stacked_bar=function(phy_obj_abs,
                             unclassified_value="unclassified",## this value is for 1. sorting, keep the "unclassified_value" to the end; 2. Or remove the "unclassified"
                             remove_unclassified=F,
                             stats_test=F,
+                            alpha = 0.8,
                             line_size=0,
                             basic_font_size=10,
                             line_color="black",
@@ -25,32 +26,31 @@ auto_stacked_bar=function(phy_obj_abs,
     
 
     # check marker
-    marker = phy_check_abs_rel_clr(phy_obj_abs%>%otu_table%>%as.data.frame_plus)
+    marker = phy_check_abs_rel_clr(phy_obj_abs %>% otu_table %>% as.data.frame_plus)
 
     if(marker != "ABS") {
     stop("Only ABS can plot Stacked bar.")
     }
 
+    # Whether to remove the "unclassified"?
     print(sprintf("The unclassified value you specified is '%s', all this value among the whole taxa table will be treated as unclassified.",unclassified_value))
-    
-    ## Aggregate to TOP
-    phy_obj_top=phy_aggregate_top_taxa_plus(phy_obj_abs,top,level,only_keep_level_aggregate=T) #### here will create a new OTU call "Other"
-
-    ## Whether to remove the "unclassified"?
     level_sym = level %>% as.name
 
     if(remove_unclassified){
         print(sprintf("Will remove the unclassified taxa in %s level",level))
-        phy_obj_top = phy_obj_top %>% phy_filter_unclassified(level = level,unclassified_marker = unclassified_value,strict = F)
+        phy_obj_abs = phy_obj_abs %>% phy_filter_unclassified(level = level, unclassified_marker = unclassified_value, strict = F)
     }
-
-    ## get the relative (IF decided to remove "unclassified, should remove before transform to relative.")
-    phy_obj_top_rel=phy_obj_top%>%phy_transform_abs_to_rel
     
+    ## Aggregate to TOP
+    phy_obj_top = phy_aggregate_top(phy_obj_abs, top, level) #### here will create a new OTU call "Other"
+
+
+    ## get the relative 
+    phy_obj_top_rel = phy_obj_top %>% phy_transform_abs_to_rel(multiply_factor = 100)
 
     ## df_otu
-    df_top_abs=phy_obj_top%>%abundances%>%as.data.frame_plus
-    df_top_rel=phy_obj_top_rel%>%abundances%>%as.data.frame_plus%>%mutate_all(~round(.x,4))
+    df_top_abs = phy_obj_top %>% abundances %>% as.data.frame_plus
+    df_top_rel = phy_obj_top_rel %>% abundances %>% as.data.frame_plus %>% mutate_all(~round(.x,4))
 
     ## df_meta
     df_meta = try(sample_data(phy_obj_abs)%>%
@@ -115,9 +115,9 @@ auto_stacked_bar=function(phy_obj_abs,
     }
 
     ## fig
-    fig_abs=df_top_abs_longer%>%ggbarplot(x = "sample",y="readcounts",fill = level,palette=palette,width=1,size=line_size,color=line_color)+
+    fig_abs=df_top_abs_longer%>%ggbarplot(x = "sample",y="readcounts",alpha = alpha, fill = level,palette=palette,width=1,size=line_size,color=line_color)
                                     labs(y="Readcounts")
-    fig_rel=df_top_rel_longer%>%ggbarplot(x = "sample",y="relative_abundance",fill = level,palette=palette,width=1,size=line_size,color=line_color)+
+    fig_rel=df_top_rel_longer%>%ggbarplot(x = "sample",y="relative_abundance",alpha = alpha, fill = level,palette=palette,width=1,size=line_size,color=line_color)+
                                     labs(y="Relative abundance")
     
 #    if(!is.null(group_col)){
@@ -125,12 +125,12 @@ auto_stacked_bar=function(phy_obj_abs,
 #        fig_abs=fig_abs+facet_wrap(form,scales="free_x",nrow = 1)
 #        fig_rel=fig_rel+facet_wrap(form,scales="free_x",nrow = 1)
 #    }
-    fig_abs=fig_abs+scale_y_continuous(expand = c(0, 0))
-    fig_rel=fig_rel+scale_y_continuous(expand = c(0, 0))
+    fig_abs = fig_abs + scale_y_continuous(expand = c(0, 0))
+    fig_rel = fig_rel + scale_y_continuous(expand = c(0, 0))
 
     # theme
-    fig_abs=fig_abs + theme(text = element_text(size = basic_font_size))
-    fig_rel=fig_rel + theme(text = element_text(size = basic_font_size))
+    fig_abs=fig_abs + theme_transparent2(base_size = basic_font_size, base_family = "arial") + theme(legend.position = "top")
+    fig_rel=fig_rel + theme_transparent2(base_size = basic_font_size, base_family = "arial") + theme(legend.position = "top")
 
     if(!plot_x_ticks_label){
         fig_abs=fig_abs + theme(axis.text.x = element_blank(),axis.title.x = element_blank(),axis.ticks.x = element_blank())
@@ -141,7 +141,7 @@ auto_stacked_bar=function(phy_obj_abs,
         fig_abs = fig_abs + theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
         fig_rel = fig_rel + theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
     }
-    
+
     ## save fig and df
     abs_name=sprintf("%s_ABS_TOP%s_%s",filename_prefix,top,level)
     rel_name=sprintf("%s_REL_TOP%s_%s",filename_prefix,top,level)

@@ -42,7 +42,7 @@ printf "》》Get %s files, they are: \n%s\n" $n_f "$f_list"
 out_unpo="${out_dir}/Merge_kraken2_raw.tsv"
 out_po="${out_dir}/Merge_kraken2_polished.tsv"
 out_f_list="${out_dir}/Merge_kraken2_f_list.tsv"
-out_taxid="${out_dir}/taxa_table/all_taxid.tsv"
+out_taxid="${out_dir}/raw_taxa_table/all_taxid.tsv"
 
 ## make directory prepared
 dir_taxa_table=$(dirname "$out_taxid")
@@ -73,8 +73,9 @@ echo -e "》》Saving file list\n"
 echo "$inputs_info" > $out_f_list
 
 ## save the df_taxid
-echo -e "》》Saving df_taxid and df_otu_taxid in specific subdirs.\n"
-taxid=$(echo "$realtable" |csvtk cut -t -f "taxid")
+echo -e "》》Saving df_taxid in specific subdirs.\n"
+taxid=$(echo "$realtable" | csvtk cut -t -f "taxid" | tail -n +2) # extract teh column with head "taxid", but remove the header
+echo "$taxid" > $out_taxid
 
 ## prompt
 echo -e "》》All finished.\n"

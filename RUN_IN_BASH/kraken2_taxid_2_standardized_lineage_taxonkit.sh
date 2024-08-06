@@ -41,13 +41,15 @@ fi
 
 # Determine the output directory and filename
 output_dir=$(dirname "$input_file")
-output_file="$output_dir/df_taxa_standardized.tsv"
+output_file_raw="$output_dir/df_taxa_standardized_raw.tsv"
+output_file_polished="$output_dir/df_taxa_standardized_polished.tsv"
 
-printf "》》Input taxid is %s, will output lineage to %s.\n" "$input_file" "$output_file"
+printf "》》Input taxid is %s, will output lineage to %s.\n" "$input_file" "$output_file_raw"
 
 # Step 1: Perform taxonkit reformat and add header using sed
-taxonkit reformat -I 1 -r "$unclassified_marker" "$input_file" \
-    | sed 's/;/\t/g' \
-    | sed '1i\taxid\tkindom\tphylum\tclass\torder\tfamily\tgenus\tspecies' > "$output_file"
+taxonkit reformat -f "{k}\t{p}\t{c}\t{o}\t{f}\t{g}\t{s}" -I 1 -i 2 -r "$unclassified_marker" "$input_file" > "$output_file_raw"
 
-echo "》》All finished, file is saved to $output_file."
+cat "$output_file_raw" \
+    | sed '1i\taxid\tkindom\tphylum\tclass\torder\tfamily\tgenus\tspecies' > "$output_file_polished"
+
+echo "》》All finished, file is saved to $output_file_polished."

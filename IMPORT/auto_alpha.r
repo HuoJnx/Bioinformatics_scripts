@@ -17,7 +17,7 @@ auto_alpha_boxplot = function(phy_obj,
                     verbose_test_res_for_plot=T,
                     plot_sample_label = T,
                     sample_label = "sample", 
-                    basic_font_size=10, 
+                    basic_font_size=20, 
                     save_dir = ".", 
                     filename_prefix = "",
                     fig_fmt = "svg",
@@ -53,7 +53,7 @@ auto_alpha_boxplot = function(phy_obj,
     for (ind in index_list) {
         function_say(sprintf("Plotting figures and getting statistics for %s.",ind))
         # Call ggbox_points_pairwise_plus function
-        fig_table=ggbox_points_pairwise_plus(df_plot=df_plot,
+        fig_table = ggbox_points_pairwise_plus(df_plot=df_plot,
                                                       value_col=ind,
                                                       group_col=group_col,
                                                       plotting_style = plotting_style,
@@ -71,8 +71,8 @@ auto_alpha_boxplot = function(phy_obj,
           )
 
         # Extract the figure and test results
-        fig=fig_table$figure
-        df_test=fig_table$test_results
+        fig = fig_table$figure
+        df_test = fig_table$test_results
 
 
 
@@ -82,6 +82,12 @@ auto_alpha_boxplot = function(phy_obj,
 
         # Optionally save test results
         if (sig_test && !is.null(df_test)) {
+            # Perform additional tests in different algorithm for validation
+            df_test_t = publish_t_test(df_plot, group_col = group_col, value_col = ind) %>% .$merge
+            df_test_wilcox = publish_wilcox_test(df_plot, group_col = group_col, value_col = ind) %>% .$merge
+
+            write_df_wrap(df_test_t, file_name=paste0(df_name,"_","validation_T"), save_dir = save_dir, file_fmt = "xlsx")
+            write_df_wrap(df_test_wilcox, file_name=paste0(df_name,"_","validation_WILCOX"), save_dir = save_dir, file_fmt = "xlsx")
             write_df_wrap(df_test, file_name=df_name, save_dir=save_dir,file_fmt="xlsx")
             
         }
